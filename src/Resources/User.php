@@ -5,6 +5,7 @@ namespace QRFeedz\Admin\Resources;
 use App\Nova\Resource;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
@@ -12,6 +13,7 @@ use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use QRFeedz\Admin\Actions\ResetPassword;
+use QRFeedz\Admin\Resources\Client;
 
 class User extends Resource
 {
@@ -61,15 +63,19 @@ class User extends Resource
         return $query->where('id', $user->id);
     }
 
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @return array
-     */
+    public static function softDeletes()
+    {
+        return false;
+    }
+
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            ID::make()
+              ->sortable()
+              ->canSee(function ($request) {
+                    return $request->user()->is_admin;
+              }),
 
             Text::make('Name')
                 ->sortable()
@@ -87,6 +93,9 @@ class User extends Resource
                 ->canSee(function ($request) {
                     return $request->user()->is_admin;
                 }),
+
+            BelongsTo::make('Client', 'client', Client::class)
+                     ->withoutTrashed(),
 
             DateTime::make('Created At')
                     ->hideFromIndex()
@@ -115,41 +124,21 @@ class User extends Resource
         ];
     }
 
-    /**
-     * Get the cards available for the request.
-     *
-     * @return array
-     */
     public function cards(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the filters available for the resource.
-     *
-     * @return array
-     */
     public function filters(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the lenses available for the resource.
-     *
-     * @return array
-     */
     public function lenses(NovaRequest $request)
     {
         return [];
     }
 
-    /**
-     * Get the actions available for the resource.
-     *
-     * @return array
-     */
     public function actions(NovaRequest $request)
     {
         return [
