@@ -24,32 +24,28 @@ use QRFeedz\Foundation\Abstracts\QRFeedzServiceProvider;
 
 class AdminServiceProvider extends QRFeedzServiceProvider
 {
-    private $novaBooted = false;
-
     public function boot()
     {
-        if ($this->novaBooted) {
-            $this->registerMacros();
+        $this->registerMacros();
 
-            Nova::resources([
-                User::class,
-                Country::class,
-                Authorization::class,
-                Category::class,
-                Location::class,
-                Client::class,
-                Locale::class,
-                Questionnaire::class,
-                OpenAIPrompt::class,
-                Page::class,
-                PageInstance::class,
-                QuestionInstance::class,
-                WidgetInstance::class,
-                Response::class,
-                Tag::class,
-                Widget::class,
-            ]);
-        }
+        Nova::resources([
+            User::class,
+            Country::class,
+            Authorization::class,
+            Category::class,
+            Location::class,
+            Client::class,
+            Locale::class,
+            Questionnaire::class,
+            OpenAIPrompt::class,
+            Page::class,
+            PageInstance::class,
+            QuestionInstance::class,
+            WidgetInstance::class,
+            Response::class,
+            Tag::class,
+            Widget::class,
+        ]);
     }
 
     public function register()
