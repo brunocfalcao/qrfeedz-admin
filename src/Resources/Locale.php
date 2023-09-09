@@ -2,17 +2,21 @@
 
 namespace QRFeedz\Admin\Resources;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\Canonical;
+use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Locale extends QRFeedzResource
 {
+    use DefaultAscPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\Locale::class;
 
     public static $title = 'name';
@@ -21,10 +25,24 @@ class Locale extends QRFeedzResource
         'name',
     ];
 
+    public static function softDeletes()
+    {
+        return request()->user()->isSuperAdmin();
+    }
+
+    public static function availableForNavigation(Request $request)
+    {
+        $user = $request->user();
+
+        return
+            // The user is a super admin.
+            $user->isSuperAdmin();
+    }
+
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            IDSuperAdmin::make(),
 
             Text::make('Name')
                 ->sortable()
@@ -65,7 +83,6 @@ class Locale extends QRFeedzResource
                 ])
                 ->nullable()
                 ->collapsedByDefault(),
-
         ];
     }
 }
