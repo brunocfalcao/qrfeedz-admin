@@ -9,10 +9,13 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Country extends QRFeedzResource
 {
+    use DefaultAscPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\Country::class;
 
     public static $title = 'name';
@@ -36,11 +39,6 @@ class Country extends QRFeedzResource
         return
             // The user is a super admin.
             $request->user()->isSuperAdmin();
-    }
-
-    public static function defaultOrderings($query)
-    {
-        return $query->orderBy('name', 'asc');
     }
 
     public static function softDeletes()
