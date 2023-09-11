@@ -3,6 +3,7 @@
 namespace QRFeedz\Admin;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\View;
 use Laravel\Nova\Nova;
 use QRFeedz\Admin\Resources\Authorization;
 use QRFeedz\Admin\Resources\Category;
@@ -26,6 +27,8 @@ class AdminServiceProvider extends QRFeedzServiceProvider
 {
     public function boot()
     {
+        $this->registerViewContexts();
+
         $this->registerMacros();
 
         Nova::resources([
@@ -51,6 +54,29 @@ class AdminServiceProvider extends QRFeedzServiceProvider
     public function register()
     {
         //
+    }
+
+    protected function registerViewContexts()
+    {
+        // For Detail view
+        View::composer('nova::resources.detail', function () {
+            session(['novaContext' => 'detail']);
+        });
+
+        // For Index view
+        View::composer('nova::resources.index', function () {
+            session(['novaContext' => 'index']);
+        });
+
+        // For Create view
+        View::composer('nova::resources.create', function () {
+            session(['novaContext' => 'create']);
+        });
+
+        // For Update view
+        View::composer('nova::resources.update', function () {
+            session(['novaContext' => 'update']);
+        });
     }
 
     protected function registerMacros(): void

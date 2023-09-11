@@ -63,9 +63,6 @@ class Country extends QRFeedzResource
 
             HasMany::make('Users', 'users', User::class)
                    ->collapsedByDefault(),
-
-            HasMany::make('Locations', 'locations', Location::class)
-                   ->collapsedByDefault(),
         ];
     }
 }
