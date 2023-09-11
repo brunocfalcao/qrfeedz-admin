@@ -2,16 +2,20 @@
 
 namespace QRFeedz\Admin\Resources;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Location extends QRFeedzResource
 {
+    use DefaultDescPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\Location::class;
 
     public static $title = 'name';
@@ -23,6 +27,20 @@ class Location extends QRFeedzResource
     public function subtitle()
     {
         return $this->client->name;
+    }
+
+    public static function softDeletes()
+    {
+        return request()->user()->isSuperAdmin();
+    }
+
+    public static function availableForNavigation(Request $request)
+    {
+        $user = $request->user();
+
+        return
+            // The user is allowed admin access (client-admin, etc).
+            $user->isAllowedAdminAccess();
     }
 
     public function fields(NovaRequest $request)

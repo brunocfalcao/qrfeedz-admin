@@ -2,44 +2,83 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use App\Nova\Resource;
-use Laravel\Nova\Fields\ID;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
-class OpenAIPrompt extends Resource
+class OpenAIPrompt extends QRFeedzResource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var class-string<\App\QRFeedz\Cube\Models\Widget>
-     */
     public static $model = \QRFeedz\Cube\Models\OpenAIPrompt::class;
 
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
-    public static $title = 'id';
-
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
     public static $search = [
-        'id',
+        'prompt_i_am_a_business_of',
+        'prompt_i_am_paying_attention_to',
     ];
 
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @return array
-     */
+    public static function label()
+    {
+        return 'OpenAI Prompts';
+    }
+
+    public function title()
+    {
+        return 'AI Prompt for '.$this->questionnaire->name;
+    }
+
+    public static function defaultOrderings($query)
+    {
+        return $query->orderBy('questionnaire_id', 'desc');
+    }
+
+    public static function availableForNavigation(Request $request)
+    {
+        $user = $request->user();
+
+        return
+            // The user is an affiliate.
+            $user->isAffiliate() ||
+
+            // The user is a super admin.
+            $user->isSuperAdmin();
+    }
+
+    public static function softDeletes()
+    {
+        return request()->user()->isSuperAdmin();
+    }
+
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            IDSuperAdmin::make(),
+
+            Text::make('I am a business of', 'prompt_i_am_a_business_of')
+                ->rules('required')
+                ->helpWarning('E.g.: A restaurant in Nancy'),
+
+            Text::make('I am paying attention to', 'prompt_i_am_paying_attention_to')
+                ->rules('required')
+                ->helpWarning('Food quality, and arrival assiduity'),
+
+            Select::make('Balance type', 'balance_type')->options([
+                'balanced' => 'Balanced',
+                'worst-case' => 'Worst cases',
+                'best-case' => 'Best cases',
+            ])
+                ->helpWarning('On what do you want to focus your improvement feedback?'),
+
+            Boolean::make('Show OpenAI be email-aware?', 'should_be_email_aware')
+                   ->helpWarning('If it is, then a notification is sent to the questionnaire owner if an email is given by a visitor'),
+
+            BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
+
+            new Panel('Timestamps', $this->timestamps($request)),
         ];
     }
 }
