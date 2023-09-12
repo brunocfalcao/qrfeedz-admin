@@ -73,7 +73,7 @@ class OpenAIPrompt extends QRFeedzResource
             ])
                 ->helpInfo('On what do you want to focus your improvement feedback?'),
 
-            Boolean::make('Show OpenAI be email-aware?', 'should_be_email_aware')
+            Boolean::make('Should OpenAI be email-aware?', 'should_be_email_aware')
                    ->helpInfo('If it is, then a notification is sent to the questionnaire owner if an email is given by a visitor'),
 
             BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),

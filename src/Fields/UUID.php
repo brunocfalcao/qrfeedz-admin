@@ -18,8 +18,12 @@ class UUID extends Text
         $resourceId = $request->route('resourceId');
 
         $resource = Nova::resourceInstanceForKey($resourceName);
-        $model = $resource->newModel();
 
+        if (! $resource) {
+            return;
+        }
+
+        $model = $resource->newModel();
         $tableName = $model->getTable();
 
         $this->hideFromIndex();
@@ -31,7 +35,7 @@ class UUID extends Text
             $this->rules('required', 'uuid', 'unique:'.$tableName.','.$attribute.','.$resourceId);
         } else {
             // If creating, apply the regular unique validation
-            $this->rules('required', 'uuid', 'unique:'.$tableName.','.$attribute);
+            $this->rules('uuid', 'unique:'.$tableName.','.$attribute);
         }
     }
 }

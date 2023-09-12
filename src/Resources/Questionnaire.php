@@ -2,27 +2,31 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Fields\UUID;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
-class Questionnaire extends Resource
+class Questionnaire extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\Questionnaire::class;
 
     public static $title = 'name';
 
     public static $search = [
-        'name', 'title',
+        'name', 'title', 'description',
     ];
 
     public function fields(NovaRequest $request)
@@ -54,6 +58,8 @@ class Questionnaire extends Resource
 
             Color::make('Secondary color', 'color_secondary'),
 
+            new Panel('Timestamps', $this->timestamps($request)),
+
             KeyValue::make('Data', 'data'),
 
             DateTime::make('Started at', 'starts_at')
@@ -68,6 +74,13 @@ class Questionnaire extends Resource
             BelongsTo::make('Category', 'category', Category::class)
                      ->withoutTrashed(),
 
+            HasMany::make('Page instances', 'pageInstances', PageInstance::class),
+
+            HasOne::make('OpenAI Prompt', 'OpenAIPrompt', OpenAIPrompt::class),
+
+            MorphToMany::make('Tags', 'tags', Tag::class)
+                       ->nullable()
+                       ->collapsedByDefault(),
         ];
     }
 }
