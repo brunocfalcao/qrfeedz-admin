@@ -2,8 +2,11 @@
 
 namespace QRFeedz\Admin;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\View;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Menu\MenuItem;
+use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use QRFeedz\Admin\Resources\Authorization;
 use QRFeedz\Admin\Resources\Category;
@@ -27,21 +30,48 @@ class AdminServiceProvider extends QRFeedzServiceProvider
 {
     public function boot()
     {
-        $this->registerViewContexts();
-
         $this->registerMacros();
+
+        Nova::mainMenu(function (Request $request) {
+            return [
+                MenuSection::make('Management', [
+                    MenuItem::resource(Client::class),
+                    MenuItem::resource(Location::class),
+                    MenuItem::resource(Questionnaire::class),
+                ])->icon('server')
+                  ->canSee(function (NovaRequest $request) {
+                      // User is super admin.
+                      return $request->user()->isSuperAdmin() ||
+
+                             // User is client-admin.
+                             $request->user()->isAtLeastAuthorizedAs('client-admin');
+                  }),
+
+                MenuSection::make('System', [
+                    MenuItem::resource(OpenAIPrompt::class),
+                    MenuItem::resource(Authorization::class),
+                    MenuItem::resource(Category::class),
+                    MenuItem::resource(Country::class),
+                    MenuItem::resource(Locale::class),
+                    MenuItem::resource(Page::class),
+                ])->icon('server')
+                  ->canSee(function (NovaRequest $request) {
+                      return $request->user()->isSuperAdmin();
+                  }),
+            ];
+        });
 
         Nova::resources([
             User::class,
-            Country::class,
-            Authorization::class,
-            Category::class,
-            Location::class,
-            Client::class,
-            Locale::class,
-            Questionnaire::class,
-            OpenAIPrompt::class,
-            Page::class,
+            Country::class, // Added.
+            Authorization::class, // Added.
+            Category::class, // Added.
+            Location::class, // Added.
+            Client::class, // Added.
+            Locale::class, // Added.
+            Questionnaire::class, // Added.
+            OpenAIPrompt::class, // Added.
+            Page::class, // Added.
             PageInstance::class,
             QuestionInstance::class,
             WidgetInstance::class,
@@ -54,29 +84,6 @@ class AdminServiceProvider extends QRFeedzServiceProvider
     public function register()
     {
         //
-    }
-
-    protected function registerViewContexts()
-    {
-        // For Detail view
-        View::composer('nova::resources.detail', function () {
-            session(['novaContext' => 'detail']);
-        });
-
-        // For Index view
-        View::composer('nova::resources.index', function () {
-            session(['novaContext' => 'index']);
-        });
-
-        // For Create view
-        View::composer('nova::resources.create', function () {
-            session(['novaContext' => 'create']);
-        });
-
-        // For Update view
-        View::composer('nova::resources.update', function () {
-            session(['novaContext' => 'update']);
-        });
     }
 
     protected function registerMacros(): void
