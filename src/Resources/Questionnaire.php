@@ -3,43 +3,71 @@
 namespace QRFeedz\Admin\Resources;
 
 use App\Nova\Resource;
-use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\Color;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\UUID;
 
 class Questionnaire extends Resource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var class-string<\App\QRFeedz\Cube\Models\Questionnaire>
-     */
     public static $model = \QRFeedz\Cube\Models\Questionnaire::class;
 
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
     public static $title = 'name';
 
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
     public static $search = [
-        'id',
+        'name', 'title',
     ];
 
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @return array
-     */
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            IDSuperAdmin::make(),
+
+            UUID::make(),
+
+            Text::make('Name')
+                ->rules('required'),
+
+            Text::make('Title')
+                ->rules('required'),
+
+            BelongsTo::make('Client', 'client', Client::class)
+                     ->withoutTrashed(),
+
+            BelongsTo::make('Location', 'location', Location::class)
+                     ->withoutTrashed(),
+
+            Textarea::make('Description'),
+
+            Image::make('Logo', 'file_logo'),
+
+            Boolean::make('Active?', 'is_active'),
+
+            Color::make('Primary color', 'color_primary'),
+
+            Color::make('Secondary color', 'color_secondary'),
+
+            KeyValue::make('Data', 'data'),
+
+            DateTime::make('Started at', 'starts_at')
+                    ->hideFromIndex(),
+
+            DateTime::make('Ending at', 'ends_at')
+                     ->hideFromIndex(),
+
+            BelongsTo::make('Default locale', 'locale', Locale::class)
+                     ->withoutTrashed(),
+
+            BelongsTo::make('Category', 'category', Category::class)
+                     ->withoutTrashed(),
+
         ];
     }
 }
