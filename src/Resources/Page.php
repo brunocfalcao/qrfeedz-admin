@@ -8,10 +8,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\Canonical;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Page extends QRFeedzResource
 {
+    use DefaultDescPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\Page::class;
 
     public static $title = 'name';
@@ -19,6 +22,11 @@ class Page extends QRFeedzResource
     public static $search = [
         'name', 'description',
     ];
+
+    public static function softDeletes()
+    {
+        return request()->user()->isSuperAdmin();
+    }
 
     public function fields(NovaRequest $request)
     {
