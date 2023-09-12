@@ -39,6 +39,33 @@ class Questionnaire extends QRFeedzResource
         return $this->location->locality.', '.$this->location->country->name;
     }
 
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        $user = $request->user();
+        $modelInstance = static::newModel();
+
+        // Super admin? Done.
+        if ($user->isSuperAdmin()) {
+            return $query;
+        }
+
+        // Affiliates can only see questionnaires from their own clients.
+        if ($user->isAffiliate()) {
+            return $query->join(
+                'clients',
+                'questionnaires.client_id',
+                '=',
+                'clients.id'
+            )
+             ->where('clients.id', $user->client_id);
+        }
+
+        // Client admins can only see its own questionnaires.
+        if ($user->isAuthorizedAs($modelInstance, 'client-admin')) {
+            return $query->where('client_id', $user->client->id);
+        }
+    }
+
     public static function availableForNavigation(Request $request)
     {
         $user = $request->user();
