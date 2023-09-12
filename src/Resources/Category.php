@@ -53,7 +53,7 @@ class Category extends QRFeedzResource
                 ->rules('required', 'max:255'),
 
             Canonical::make()
-                ->helpWarning('Please ensure that, if you change this value, you do not have it hard-coded somewhere!')
+                ->helpInfo('Please ensure that, if you change this value, you do not have it hard-coded somewhere!')
                 ->sortable(),
 
             Text::make('Description')

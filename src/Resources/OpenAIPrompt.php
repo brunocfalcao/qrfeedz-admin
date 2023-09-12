@@ -60,21 +60,21 @@ class OpenAIPrompt extends QRFeedzResource
 
             Text::make('I am a business of', 'prompt_i_am_a_business_of')
                 ->rules('required')
-                ->helpWarning('E.g.: A restaurant in Nancy'),
+                ->helpInfo('E.g.: A restaurant in Nancy'),
 
             Text::make('I am paying attention to', 'prompt_i_am_paying_attention_to')
                 ->rules('required')
-                ->helpWarning('Food quality, and arrival assiduity'),
+                ->helpInfo('Food quality, and arrival assiduity'),
 
             Select::make('Balance type', 'balance_type')->options([
                 'balanced' => 'Balanced',
                 'worst-case' => 'Worst cases',
                 'best-case' => 'Best cases',
             ])
-                ->helpWarning('On what do you want to focus your improvement feedback?'),
+                ->helpInfo('On what do you want to focus your improvement feedback?'),
 
             Boolean::make('Show OpenAI be email-aware?', 'should_be_email_aware')
-                   ->helpWarning('If it is, then a notification is sent to the questionnaire owner if an email is given by a visitor'),
+                   ->helpInfo('If it is, then a notification is sent to the questionnaire owner if an email is given by a visitor'),
 
             BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 

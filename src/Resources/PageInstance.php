@@ -2,44 +2,70 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use App\Nova\Resource;
-use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\KeyValue;
+use Laravel\Nova\Fields\Number;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\UUID;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
-class PageInstance extends Resource
+class PageInstance extends QRFeedzResource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var class-string<\App\QRFeedz\Cube\Models\Widget>
-     */
     public static $model = \QRFeedz\Cube\Models\PageInstance::class;
 
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
     public static $title = 'id';
 
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
-    public static $search = [
-        'id',
-    ];
+    public static $search = [];
 
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @return array
-     */
+    public function title()
+    {
+        return 'Page '.$this->page->name.' instance';
+    }
+
+    public static function softDeletes()
+    {
+        return request()->user()->isSuperAdmin();
+    }
+
+    public static function defaultOrderings($query)
+    {
+        return $query->orderBy('questionnaire_id', 'desc')
+                     ->orderBy('index', 'asc');
+    }
+
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            IDSuperAdmin::make(),
+
+            UUID::make(),
+
+            BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
+                     ->withoutTrashed(),
+
+            BelongsTo::make('Page', 'page', Page::class)
+                     ->withoutTrashed(),
+
+            Text::make('View Component')
+                ->readonly(),
+
+            Text::make('View component override', 'view_component_override')
+                ->onlyOnForms(),
+
+            Number::make('Index'),
+
+            Text::make('Group'),
+
+            KeyValue::make('Data'),
+
+            new Panel('Timestamps', $this->timestamps($request)),
+
+            HasMany::make('Question instances', 'questionInstances', QuestionInstance::class)
+                   ->collapsedByDefault(),
         ];
     }
 }

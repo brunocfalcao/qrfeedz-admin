@@ -41,11 +41,11 @@ class Page extends QRFeedzResource
 
             Text::make('Description')
                 ->rules('required')
-                ->helpWarning('An easy way to remember what is page is used for'),
+                ->helpInfo('An easy way to remember what is page is used for'),
 
             Text::make('View component namespace', 'view_component_namespace')
                 ->rules('required')
-                ->helpWarning('Cascades to the page instance, if not defined there'),
+                ->helpInfo('Cascades to the page instance, if not defined there'),
 
             new Panel('Timestamps', $this->timestamps($request)),
 

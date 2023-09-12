@@ -40,8 +40,9 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                     MenuItem::resource(Questionnaire::class),
                 ])->icon('server')
                   ->canSee(function (NovaRequest $request) {
-                      // User is super admin.
-                      return $request->user()->isSuperAdmin() ||
+                      return
+                            // User is super admin.
+                            $request->user()->isSuperAdmin() ||
 
                              // User is client-admin.
                              $request->user()->isAtLeastAuthorizedAs('client-admin');
@@ -50,6 +51,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                 MenuSection::make('System', [
                     MenuItem::resource(OpenAIPrompt::class),
                     MenuItem::resource(Authorization::class),
+                    MenuItem::resource(PageInstance::class),
                     MenuItem::resource(Category::class),
                     MenuItem::resource(Country::class),
                     MenuItem::resource(Locale::class),

@@ -8,7 +8,7 @@ use Laravel\Nova\Nova;
 
 class Canonical extends Text
 {
-    public function __construct($name = 'Canonical', $attribute = null, callable $resolveCallback = null)
+    public function __construct($name = 'Canonical', $attribute = 'canonical', callable $resolveCallback = null)
     {
         parent::__construct($name, $attribute, $resolveCallback);
 
@@ -28,6 +28,6 @@ class Canonical extends Text
         $tableName = $model->getTable();
 
         // Set the rules
-        $this->rules('required', 'max:255', 'unique:'.$tableName.',canonical');
+        $this->rules('required', 'max:255', 'unique:'.$tableName.','.$attribute);
     }
 }
