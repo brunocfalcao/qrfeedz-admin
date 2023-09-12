@@ -74,7 +74,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             Questionnaire::class, // Added.
             OpenAIPrompt::class, // Added.
             Page::class, // Added.
-            PageInstance::class,
+            PageInstance::class, // Added.
             QuestionInstance::class,
             WidgetInstance::class,
             Response::class,

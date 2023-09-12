@@ -17,8 +17,6 @@ class PageInstance extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\PageInstance::class;
 
-    public static $title = 'id';
-
     public static $search = [];
 
     public function title()
