@@ -2,6 +2,7 @@
 
 namespace QRFeedz\Admin\Resources;
 
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Color;
@@ -15,12 +16,16 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Fields\UUID;
+use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Questionnaire extends QRFeedzResource
 {
+    use DefaultDescPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\Questionnaire::class;
 
     public static $title = 'name';
@@ -28,6 +33,31 @@ class Questionnaire extends QRFeedzResource
     public static $search = [
         'name', 'title', 'description',
     ];
+
+    public function subtitle()
+    {
+        return $this->location->locality.', '.$this->location->country->name;
+    }
+
+    public static function availableForNavigation(Request $request)
+    {
+        $user = $request->user();
+
+        return
+            // The user is an affiliate.
+            $user->isAffiliate() ||
+
+            // The user is a super admin.
+            $user->isSuperAdmin() ||
+
+            // The user has at least one "client admin" authorization.
+            $user->isAtLeastAuthorizedAs('client-admin');
+    }
+
+    public static function softDeletes()
+    {
+        return request()->user()->isSuperAdmin();
+    }
 
     public function fields(NovaRequest $request)
     {
@@ -79,6 +109,14 @@ class Questionnaire extends QRFeedzResource
             HasOne::make('OpenAI Prompt', 'OpenAIPrompt', OpenAIPrompt::class),
 
             MorphToMany::make('Tags', 'tags', Tag::class)
+                       ->nullable()
+                       ->collapsedByDefault(),
+
+            MorphToMany::make('Authorizations', 'authorizations', Authorization::class)
+                       ->fields(fn () => [
+                           FKLink::make('User', 'user_id', User::class)
+                                 ->sortable(),
+                       ])
                        ->nullable()
                        ->collapsedByDefault(),
         ];
