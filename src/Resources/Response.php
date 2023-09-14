@@ -7,7 +7,6 @@ use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use QRFeedz\Admin\Fields\BelongsToThrough;
-use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 

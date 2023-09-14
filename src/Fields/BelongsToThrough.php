@@ -12,7 +12,7 @@ class BelongsToThrough
             ->resolveUsing(function ($resource) use ($relationshipCallback, $resourceClass) {
                 try {
                     $relatedResource = call_user_func($relationshipCallback, $resource);
-                    if (!$relatedResource) {
+                    if (! $relatedResource) {
                         return null;
                     }
 
