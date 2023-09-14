@@ -2,44 +2,78 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use App\Nova\Resource;
-use Laravel\Nova\Fields\ID;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
+use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\MorphToMany;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\UUID;
+use QRFeedz\Admin\Traits\DefaultDescPKSorting;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
-class QuestionInstance extends Resource
+class QuestionInstance extends QRFeedzResource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var class-string<\App\QRFeedz\Cube\Models\Widget>
-     */
+    use DefaultDescPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\QuestionInstance::class;
 
-    /**
-     * The single value that should be used to represent the resource when being displayed.
-     *
-     * @var string
-     */
-    public static $title = 'id';
+    public static $globallySearchable = false;
 
-    /**
-     * The columns that should be searched.
-     *
-     * @var array
-     */
-    public static $search = [
-        'id',
-    ];
+    public function title()
+    {
+        return 'Question '.$this->pageInstance->page->name.' instance';
+    }
 
-    /**
-     * Get the fields displayed by the resource.
-     *
-     * @return array
-     */
+    public static function softDeletes()
+    {
+        return request()->user()->isSuperAdmin();
+    }
+
+    public static function availableForNavigation(Request $request)
+    {
+        $user = $request->user();
+
+        return
+            // The user is a super admin.
+            $user->isSuperAdmin();
+    }
+
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            IDSuperAdmin::make(),
+
+            UUID::make(),
+
+            BelongsTo::make('Page instance', 'pageInstance', PageInstance::class)
+                     ->withoutTrashed(),
+
+            Boolean::make('Is analytical?', 'is_analytical')
+                   ->helpInfo('If the question instance value will be used for reports.<br/>If it is not then it can be to display a message, or to capture custom information'),
+
+            Boolean::make('Contains personal data?', 'is_used_for_personal_data')
+                   ->helpInfo('If the value is data-sensitive to GDPR scopes'),
+
+            Boolean::make('Is required?', 'is_required'),
+
+            new Panel('Timestamps', $this->timestamps($request)),
+
+            HasMany::make('Widget instances', 'widgetInstances', WidgetInstance::class),
+
+            HasMany::make('Responses', 'responses', Response::class),
+
+            MorphToMany::make('Captions', 'captions', Locale::class)
+                ->fields(fn () => [
+                    Text::make('Caption', 'caption'),
+                    Text::make('Placeholder', 'placeholder'),
+                ])
+                ->nullable()
+                ->collapsedByDefault(),
+
         ];
     }
 }

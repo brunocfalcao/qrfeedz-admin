@@ -49,6 +49,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                   }),
 
                 MenuSection::make('System', [
+                    MenuItem::resource(QuestionInstance::class),
                     MenuItem::resource(OpenAIPrompt::class),
                     MenuItem::resource(Authorization::class),
                     MenuItem::resource(PageInstance::class),
@@ -75,7 +76,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             OpenAIPrompt::class, // Added.
             Page::class, // Added.
             PageInstance::class, // Added.
-            QuestionInstance::class,
+            QuestionInstance::class, // Added.
             WidgetInstance::class,
             Response::class,
             Tag::class,

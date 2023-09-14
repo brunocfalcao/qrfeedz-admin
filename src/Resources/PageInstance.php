@@ -58,6 +58,10 @@ class PageInstance extends QRFeedzResource
 
             Text::make('Group'),
 
+            Text::make('# Questions', function () {
+                return $this->questionInstances->count();
+            }),
+
             KeyValue::make('Data'),
 
             new Panel('Timestamps', $this->timestamps($request)),
