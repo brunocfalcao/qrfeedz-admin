@@ -35,9 +35,10 @@ class AdminServiceProvider extends QRFeedzServiceProvider
         Nova::mainMenu(function (Request $request) {
             return [
                 MenuSection::make('Management', [
-                    MenuItem::resource(Client::class),
-                    MenuItem::resource(Location::class),
                     MenuItem::resource(Questionnaire::class),
+                    MenuItem::resource(Response::class),
+                    MenuItem::resource(Location::class),
+                    MenuItem::resource(Client::class),
                 ])->icon('server')
                   ->canSee(function (NovaRequest $request) {
                       return
@@ -78,7 +79,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             PageInstance::class, // Added.
             QuestionInstance::class, // Added.
             WidgetInstance::class,
-            Response::class,
+            Response::class, // Added.
             Tag::class,
             Widget::class,
         ]);
