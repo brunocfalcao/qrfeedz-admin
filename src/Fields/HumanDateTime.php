@@ -24,6 +24,7 @@ class HumanDateTime extends Text
                  'index' => function ($value) {
                      return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
                  },
+
                  'detail' => function ($value) {
                      return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
                  },
