@@ -6,6 +6,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\BelongsToThrough;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -33,13 +34,17 @@ class Response extends QRFeedzResource
         return [
             IDSuperAdmin::make(),
 
-            BelongsToThrough::make('Test', function () {
-                return $this->resource->questionInstance->pageInstance->questionnaire;
+            BelongsToThrough::make('Questionnaire', function () {
+                return $this->resource
+                            ->questionInstance
+                            ->pageInstance
+                            ->questionnaire;
             }, Questionnaire::class),
 
-            Text::make('Page instance type', function () {
-                return $this->questionInstance->pageInstance->page->name;
-            }),
+            BelongsToThrough::make('Page instance', function () {
+                return $this->questionInstance
+                            ->pageInstance;
+            }, PageInstance::class),
 
             Text::make('Widget instance', function () {
                 return $this->widgetInstance->widget->name;
@@ -53,6 +58,7 @@ class Response extends QRFeedzResource
             }),
 
             BelongsTo::make('Question instance', 'questionInstance', QuestionInstance::class)
+                     ->withoutTrashed()
                      ->hideFromIndex(),
 
             Text::make('Computed value(s)', function () {
@@ -60,6 +66,8 @@ class Response extends QRFeedzResource
             }),
 
             KeyValue::make('Value dataset', 'value'),
+
+            new Panel('Timestamps', $this->timestamps($request)),
         ];
     }
 }

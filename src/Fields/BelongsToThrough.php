@@ -25,6 +25,8 @@ class BelongsToThrough
                 } catch (\Exception $e) {
                     return null;
                 }
-            })->asHtml();
+            })
+            ->exceptOnForms()
+            ->asHtml();
     }
 }

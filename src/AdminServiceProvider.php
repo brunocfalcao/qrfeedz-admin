@@ -39,7 +39,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                     MenuItem::resource(Response::class),
                     MenuItem::resource(Location::class),
                     MenuItem::resource(Client::class),
-                ])->icon('server')
+                ])->icon('chart-bar')
                   ->canSee(function (NovaRequest $request) {
                       return
                             // User is super admin.
