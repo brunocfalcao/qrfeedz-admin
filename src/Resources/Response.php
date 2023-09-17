@@ -36,8 +36,6 @@ class Response extends QRFeedzResource
     {
         $user = $request->user();
 
-        info('*');
-
         // Super admin? Done.
         if ($user->isSuperAdmin()) {
             return $query;
