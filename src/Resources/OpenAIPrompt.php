@@ -48,11 +48,6 @@ class OpenAIPrompt extends QRFeedzResource
             $user->isSuperAdmin();
     }
 
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public function fields(NovaRequest $request)
     {
         return [

@@ -9,10 +9,13 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\BelongsToThrough;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Response extends QRFeedzResource
 {
+    use DefaultDescPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\Response::class;
 
     public static $globallySearchable = false;
@@ -27,6 +30,18 @@ class Response extends QRFeedzResource
 
         return $questionInstance->captions->firstWhere('name', 'English')->pivot->caption ??
                $questionInstance->captions->first()->pivot->caption;
+    }
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        $user = $request->user();
+
+        info('*');
+
+        // Super admin? Done.
+        if ($user->isSuperAdmin()) {
+            return $query;
+        }
     }
 
     public function fields(NovaRequest $request)

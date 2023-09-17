@@ -29,11 +29,6 @@ class Location extends QRFeedzResource
         return $this->client->name;
     }
 
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public static function availableForNavigation(Request $request)
     {
         $user = $request->user();

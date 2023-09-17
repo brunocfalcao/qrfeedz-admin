@@ -34,18 +34,6 @@ class Country extends QRFeedzResource
         }
     }
 
-    public static function availableForNavigation(Request $request)
-    {
-        return
-            // The user is a super admin.
-            $request->user()->isSuperAdmin();
-    }
-
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public function fields(NovaRequest $request)
     {
         return [

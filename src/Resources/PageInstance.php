@@ -24,11 +24,6 @@ class PageInstance extends QRFeedzResource
         return 'Page '.$this->page->name.' instance';
     }
 
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public static function defaultOrderings($query)
     {
         return $query->orderBy('questionnaire_id', 'desc')
@@ -44,6 +39,9 @@ class PageInstance extends QRFeedzResource
 
             BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
                      ->withoutTrashed(),
+
+            Text::make('Name')
+                ->rules('required'),
 
             BelongsTo::make('Page', 'page', Page::class)
                      ->withoutTrashed(),

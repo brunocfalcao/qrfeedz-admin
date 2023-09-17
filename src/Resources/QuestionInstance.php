@@ -28,11 +28,6 @@ class QuestionInstance extends QRFeedzResource
         return 'Question '.$this->pageInstance->page->name.' instance';
     }
 
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public static function availableForNavigation(Request $request)
     {
         $user = $request->user();

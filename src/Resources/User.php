@@ -60,11 +60,6 @@ class User extends Resource
         });
     }
 
-    public static function softDeletes()
-    {
-        return false;
-    }
-
     public function fields(NovaRequest $request)
     {
         return [

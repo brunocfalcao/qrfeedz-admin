@@ -24,11 +24,6 @@ class Authorization extends QRFeedzResource
         'name',
     ];
 
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public function fields(Request $request)
     {
         return [

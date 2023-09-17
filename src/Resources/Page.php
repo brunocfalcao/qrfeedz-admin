@@ -23,11 +23,6 @@ class Page extends QRFeedzResource
         'name', 'description',
     ];
 
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public function fields(NovaRequest $request)
     {
         return [

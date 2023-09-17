@@ -38,11 +38,6 @@ class Category extends QRFeedzResource
             $request->user()->isSuperAdmin();
     }
 
-    public static function softDeletes()
-    {
-        return request()->user()->isSuperAdmin();
-    }
-
     public function fields(Request $request)
     {
         return [
