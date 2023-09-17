@@ -2,7 +2,6 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
