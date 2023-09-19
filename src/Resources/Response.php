@@ -48,11 +48,12 @@ class Response extends QRFeedzResource
             ->quickJoin('page_instances', 'question_instances')
             ->quickJoin('questionnaires', 'page_instances')
             ->quickJoin('locations', 'questionnaires')
-            ->quickJoin('clients as client_locations', 'locations')
-            ->join('users', 'client_locations.id', '=', 'users.client_id')
+            ->quickJoin('clients', 'locations')
+            // Cannot use quickJoin here because we are FK'ing to the previous join table.
+            ->join('users', 'clients.id', '=', 'users.client_id')
             ->when($user->isAtLeastAuthorizedAs('client-admin'), function ($query) use ($user) {
                 // Obtain the clients where the user is client-admin.
-                $query->whereIn('client_locations.id', $user->authorizationsAs('client-admin')
+                $query->whereIn('clients.id', $user->authorizationsAs('client-admin')
                                                    ->pluck('model_id'));
             })
             ->when($user->isAtLeastAuthorizedAs('location-admin'), function ($query) use ($user) {
