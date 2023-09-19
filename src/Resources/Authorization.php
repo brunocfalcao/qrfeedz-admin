@@ -50,6 +50,14 @@ class Authorization extends QRFeedzResource
                 ->nullable()
                 ->collapsedByDefault(),
 
+            MorphToMany::make('Locations', 'locations', Location::class)
+                ->fields(fn () => [
+                    FKLink::make('User', 'user_id', User::class)
+                          ->sortable(),
+                ])
+                ->nullable()
+                ->collapsedByDefault(),
+
             MorphToMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
                 ->fields(fn () => [
                     FKLink::make('User', 'user_id', User::class)

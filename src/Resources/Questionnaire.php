@@ -94,9 +94,6 @@ class Questionnaire extends QRFeedzResource
             Text::make('Title')
                 ->rules('required'),
 
-            BelongsTo::make('Client', 'client', Client::class)
-                     ->withoutTrashed(),
-
             BelongsTo::make('Location', 'location', Location::class)
                      ->withoutTrashed(),
 

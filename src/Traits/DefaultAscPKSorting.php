@@ -9,6 +9,10 @@ trait DefaultAscPKSorting
 {
     public static function defaultOrderings($query)
     {
-        return $query->orderBy($query->getModel()->getKeyName(), 'asc');
+        $model = $query->getModel();
+        $table = $model->getTable();
+        $keyName = $model->getKeyName();
+
+        return $query->orderBy("{$table}.{$keyName}");
     }
 }

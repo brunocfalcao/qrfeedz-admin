@@ -5,9 +5,11 @@ namespace QRFeedz\Admin\Resources;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -63,6 +65,14 @@ class Location extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class),
+
+            MorphToMany::make('Authorizations', 'authorizations', Authorization::class)
+                       ->fields(fn () => [
+                           FKLink::make('User', 'user_id', User::class)
+                                 ->sortable(),
+                       ])
+                       ->nullable()
+                       ->collapsedByDefault(),
         ];
     }
 }

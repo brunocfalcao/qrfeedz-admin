@@ -125,9 +125,6 @@ class Client extends QRFeedzResource
             HasMany::make('Locations', 'locations', Location::class)
                    ->collapsedByDefault(),
 
-            HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
-                   ->collapsedByDefault(),
-
             HasMany::make('Users', 'users', User::class)
                    ->collapsedByDefault(),
 

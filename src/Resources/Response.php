@@ -36,10 +36,31 @@ class Response extends QRFeedzResource
     {
         $user = $request->user();
 
-        // Super admin? Done.
-        if ($user->isSuperAdmin()) {
+        // Admin-like? Return all responses.
+        /*
+        if ($user->isAdminLike()) {
             return $query;
         }
+        */
+
+        return $query
+            ->quickJoin('question_instances', 'responses')
+            ->quickJoin('page_instances', 'question_instances')
+            ->quickJoin('questionnaires', 'page_instances')
+            ->quickJoin('locations', 'questionnaires')
+            ->quickJoin('clients as client_locations', 'locations')
+            ->join('users', 'client_locations.id', '=', 'users.client_id')
+            ->when($user->isAtLeastAuthorizedAs('client-admin'), function ($query) use ($user) {
+                // Obtain the clients where the user is client-admin.
+                $query->whereIn('client_locations.id', $user->authorizationsAs('client-admin')
+                                                   ->pluck('model_id'));
+            })
+            ->when($user->isAtLeastAuthorizedAs('location-admin'), function ($query) use ($user) {
+                // Obtain the clients where the user is location-admin.
+                $query->whereIn('locations.id', $user->authorizationsAs('location-admin')
+                                                     ->pluck('model_id'));
+            })
+            ->where('users.id', $user->id);
     }
 
     public function fields(NovaRequest $request)
