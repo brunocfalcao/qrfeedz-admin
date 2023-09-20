@@ -37,29 +37,32 @@ class Response extends QRFeedzResource
         $user = $request->user();
 
         // Admin-like? Return all responses.
-        /*
         if ($user->isAdminLike()) {
             return $query;
         }
-        */
 
         return $query
-            ->quickJoin('question_instances', 'responses')
-            ->quickJoin('page_instances', 'question_instances')
-            ->quickJoin('questionnaires', 'page_instances')
-            ->quickJoin('locations', 'questionnaires')
-            ->quickJoin('clients', 'locations')
-            // Cannot use quickJoin here because we are FK'ing to the previous join table.
-            ->join('users', 'clients.id', '=', 'users.client_id')
+            ->upTo('question_instances')
+            ->upTo('page_instances')
+            ->upTo('questionnaires')
+            ->upTo('locations')
+            ->upTo('clients') // We need to reach here so we can attach the users.
+            ->bring('users')
             ->when($user->isAtLeastAuthorizedAs('client-admin'), function ($query) use ($user) {
                 // Obtain the clients where the user is client-admin.
-                $query->whereIn('clients.id', $user->authorizationsAs('client-admin')
-                                                   ->pluck('model_id'));
+                $query->whereIn(
+                    'clients.id',
+                    $user->authorizationsAs('client-admin')
+                         ->pluck('model_id')
+                );
             })
             ->when($user->isAtLeastAuthorizedAs('location-admin'), function ($query) use ($user) {
                 // Obtain the clients where the user is location-admin.
-                $query->whereIn('locations.id', $user->authorizationsAs('location-admin')
-                                                     ->pluck('model_id'));
+                $query->whereIn(
+                    'locations.id',
+                    $user->authorizationsAs('location-admin')
+                         ->pluck('model_id')
+                );
             })
             ->where('users.id', $user->id);
     }
