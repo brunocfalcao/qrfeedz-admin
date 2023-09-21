@@ -21,16 +21,17 @@ class Canonical extends Text
         // Get the resource instance from the resource name
         $resource = Nova::resourceInstanceForKey($resourceName);
 
-        // Check if the resource is null before proceeding
+        // Check if the resource is null before proceeding.
         if ($resource) {
-            // Get the associated model
+            // Get the associated model.
             $model = $resource->newModel();
 
-            // Retrieve the table name from the model
+            // Retrieve the table name from the model.
             $tableName = $model->getTable();
 
-            // Set the rules
-            $this->rules('required', 'max:255', 'unique:'.$tableName.','.$attribute);
+            // Set the rules.
+            $this->creationRules('required', 'unique:'.$tableName.','.$attribute);
+            $this->updateRules('required', "unique:{$tableName},{$attribute},{{resourceId}}");
         }
     }
 }
