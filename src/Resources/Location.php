@@ -40,6 +40,11 @@ class Location extends QRFeedzResource
             $user->isAllowedAdminAccess();
     }
 
+    public static function softDeletes()
+    {
+        return false;
+    }
+
     public function fields(NovaRequest $request)
     {
         return [

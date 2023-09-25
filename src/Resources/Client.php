@@ -3,11 +3,11 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -58,21 +58,6 @@ class Client extends QRFeedzResource
         if ($user->isAuthorizedAs($modelInstance, 'client-admin')) {
             return $query->where('id', $user->client->id);
         }
-    }
-
-    public static function availableForNavigation(Request $request)
-    {
-        $user = $request->user();
-
-        return
-            // The user is an affiliate.
-            $user->isAffiliate() ||
-
-            // The user is a super admin.
-            $user->isSuperAdmin() ||
-
-            // The user has at least one "client admin" authorization.
-            $user->isAtLeastAuthorizedAs('client-admin');
     }
 
     public function fields(NovaRequest $request)
@@ -130,6 +115,8 @@ class Client extends QRFeedzResource
 
             BelongsToMany::make('Tags', 'tags', Tag::class)
                          ->collapsedByDefault(),
+
+            HasManyThrough::make('Questionnaires', 'questionnaires', Questionnaire::class),
 
             MorphToMany::make('Authorizations', 'authorizations', Authorization::class)
                        ->fields(fn () => [

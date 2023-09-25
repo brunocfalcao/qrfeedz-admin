@@ -18,24 +18,20 @@ class Category extends QRFeedzResource
 
     public static $model = \QRFeedz\Cube\Models\Category::class;
 
-    public static $title = 'name';
-
     public static $search = [
         'name',
     ];
+
+    public function title()
+    {
+        return $this->name;
+    }
 
     public function subtitle()
     {
         $total = $this->questionnaires()->count();
 
         return $total.' '.Str::plural('questionnaire', $total);
-    }
-
-    public static function availableForNavigation(Request $request)
-    {
-        return
-            // The user is a super admin.
-            $request->user()->isSuperAdmin();
     }
 
     public function fields(Request $request)

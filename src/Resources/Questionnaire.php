@@ -81,6 +81,11 @@ class Questionnaire extends QRFeedzResource
             $user->isAtLeastAuthorizedAs('client-admin');
     }
 
+    public static function softDeletes()
+    {
+        return false;
+    }
+
     public function fields(NovaRequest $request)
     {
         return [

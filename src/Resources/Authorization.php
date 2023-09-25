@@ -3,6 +3,8 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
@@ -18,11 +20,23 @@ class Authorization extends QRFeedzResource
 
     public static $model = \QRFeedz\Cube\Models\Authorization::class;
 
-    public static $title = 'name';
-
     public static $search = [
         'name',
     ];
+
+    public function title()
+    {
+        return $this->name;
+    }
+
+    public function subtitle()
+    {
+        $total = DB::table('authorizables')
+                   ->where('authorization_id', $this->id)
+                   ->count();
+
+        return $total.' '.Str::plural('entity', $total);
+    }
 
     public function fields(Request $request)
     {
@@ -30,38 +44,48 @@ class Authorization extends QRFeedzResource
             IDSuperAdmin::make(),
 
             Text::make('Name')
-                ->sortable()
                 ->rules('required', 'max:255'),
 
-            Canonical::make()
-                ->sortable(),
+            Canonical::make(),
 
             Text::make('Description')
                 ->charLimit(100)
                 ->nullable(),
 
-            new Panel('Timestamps', $this->timestamps($request)),
+            new Panel('Last data activity', $this->timestamps($request)),
 
-            MorphToMany::make('Related Users', 'clients', Client::class)
+            MorphToMany::make('Related Clients / Users', 'clients', Client::class)
                 ->fields(fn () => [
                     FKLink::make('User', 'user_id', User::class)
                           ->sortable(),
+
+                    Text::make('Type', function ($data) {
+                        return Authorization::find($data->authorization_id)->name;
+                    })->asHtml(),
                 ])
                 ->nullable()
                 ->collapsedByDefault(),
 
-            MorphToMany::make('Locations', 'locations', Location::class)
+            MorphToMany::make('Related Locations / Users', 'locations', Location::class)
                 ->fields(fn () => [
                     FKLink::make('User', 'user_id', User::class)
                           ->sortable(),
+
+                    Text::make('Type', function ($data) {
+                        return Authorization::find($data->authorization_id)->name;
+                    })->asHtml(),
                 ])
                 ->nullable()
                 ->collapsedByDefault(),
 
-            MorphToMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
+            MorphToMany::make('Related Questionnaires / Users', 'questionnaires', Questionnaire::class)
                 ->fields(fn () => [
                     FKLink::make('User', 'user_id', User::class)
                           ->sortable(),
+
+                    Text::make('Type', function ($data) {
+                        return Authorization::find($data->authorization_id)->name;
+                    })->asHtml(),
                 ])
                 ->nullable()
                 ->collapsedByDefault(),
