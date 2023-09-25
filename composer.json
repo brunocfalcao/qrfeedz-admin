@@ -19,7 +19,6 @@
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
         "brunocfalcao/qrfeedz-cube": "dev-master",
-        "brunocfalcao/cerebrus": "dev-master",
         "brunocfalcao/qrfeedz-foundation": "dev-master"
     },
     "autoload": {
