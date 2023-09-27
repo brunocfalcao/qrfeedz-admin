@@ -78,8 +78,15 @@ class User extends Resource
                 ->updateRules('unique:users,email,{{resourceId}}'),
 
             Password::make('Password')
-                ->updateRules('min:8')
-                ->help('Min 8 characters')
+                ->rules('required', 'min:4', 'regex:/[0-9]/', 'regex:/[@$!%*?&#]/')
+                ->withMeta([
+                    'validationMessage' => [
+                        'required' => 'The password field is required.',
+                        'min' => 'The password must be at least 4 characters.',
+                        'regex' => 'The password must contain at least one number and one special character.',
+                    ],
+                ])
+                ->help('Min 4 characters, one number, and one special character')
                 ->canSee(function ($request) {
                     $model = $request->findModel();
 
@@ -102,13 +109,11 @@ class User extends Resource
                              ->name
             )->onlyOnDetail(),
 
-            Text::make('Phone Number'),
-
             Boolean::make('Is super admin?', 'is_super_admin')
                 ->canSee(fn ($request) => $request->user()->isSuperAdmin()),
 
             BelongsTo::make('Client', 'client', Client::class)
-                     ->withoutTrashed()
+                     ->readonlyIfViaResource()
                      ->nullable()
                      ->withoutTrashed(),
 
