@@ -2,6 +2,7 @@
 
 namespace QRFeedz\Admin\Resources;
 
+use Brunocfalcao\NovaAddressFinder\NovaAddressFinder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsTo;
@@ -68,14 +69,14 @@ class Client extends QRFeedzResource
             Text::make('Name')
                 ->rules('required', 'max:255'),
 
-            Text::make('Address')
-                ->rules('required', 'max:255'),
+            NovaAddressFinder::make('Address')
+                             ->rules('max:255'),
 
             Text::make('Postal Code')
-                ->rules('required', 'max:255'),
+                ->rules('max:255'),
 
             Text::make('Locality')
-                ->rules('required', 'max:255'),
+                ->rules('max:255'),
 
             BelongsTo::make('Country', 'country')
                      ->withoutTrashed(),
