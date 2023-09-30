@@ -34,7 +34,13 @@ class FKLink extends Text
             }
 
             $resourceUriKey = $resourceClass::uriKey();
-            $url = "/nova/resources/{$resourceUriKey}/{$idValue}";
+
+            $prefix = config('nova.path');
+            if (! str_ends_with($prefix, '/')) {
+                $prefix.'/';
+            }
+
+            $url = config('nova.path')."resources/{$resourceUriKey}/{$idValue}";
 
             return "<a class=\"link-default\" href='{$url}'>{$displayValue}</a>";
         });

@@ -5,7 +5,7 @@ namespace QRFeedz\Admin\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Laravel\Nova\Fields\MorphToMany;
+use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\Canonical;
@@ -49,12 +49,12 @@ class Authorization extends QRFeedzResource
             Canonical::make(),
 
             Text::make('Description')
-                ->charLimit(100)
+                ->charLimit(50)
                 ->nullable(),
 
             new Panel('Last data activity', $this->timestamps($request)),
 
-            MorphToMany::make('Related Clients / Users', 'clients', Client::class)
+            MorphedByMany::make('Related Clients / Users', 'clients', Client::class)
                 ->fields(fn () => [
                     FKLink::make('User', 'user_id', User::class)
                           ->sortable(),
@@ -66,7 +66,7 @@ class Authorization extends QRFeedzResource
                 ->nullable()
                 ->collapsedByDefault(),
 
-            MorphToMany::make('Related Locations / Users', 'locations', Location::class)
+            MorphedByMany::make('Related Locations / Users', 'locations', Location::class)
                 ->fields(fn () => [
                     FKLink::make('User', 'user_id', User::class)
                           ->sortable(),
@@ -78,7 +78,7 @@ class Authorization extends QRFeedzResource
                 ->nullable()
                 ->collapsedByDefault(),
 
-            MorphToMany::make('Related Questionnaires / Users', 'questionnaires', Questionnaire::class)
+            MorphedByMany::make('Related Questionnaires / Users', 'questionnaires', Questionnaire::class)
                 ->fields(fn () => [
                     FKLink::make('User', 'user_id', User::class)
                           ->sortable(),

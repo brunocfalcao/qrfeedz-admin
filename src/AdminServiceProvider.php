@@ -38,6 +38,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                     MenuItem::resource(Questionnaire::class),
                     MenuItem::resource(Response::class),
                     MenuItem::resource(Location::class),
+                    MenuItem::resource(User::class),
                     MenuItem::resource(Client::class),
                 ])->icon('chart-bar')
                   ->canSee(function (NovaRequest $request) {

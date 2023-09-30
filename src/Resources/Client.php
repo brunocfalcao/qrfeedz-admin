@@ -13,7 +13,7 @@ use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\FKLink;
+use QRFeedz\Admin\Fields\BelongsToStrict;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Resources\Country as CountryResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
@@ -68,10 +68,9 @@ class Client extends QRFeedzResource
             TRCity::make('City')
                   ->hideFromIndex(),
 
-            BelongsTo::make('Country', 'country', CountryResource::class)
-                     ->readonlyIfViaResource()
-                     ->withoutTrashed()
-                     ->exceptOnForms(),
+            BelongsToStrict::make('Country', 'country', CountryResource::class)
+                           ->withoutTrashed()
+                           ->exceptOnForms(),
 
             TRCountry::make('Country', 'country_id')
                      ->resolveUsing(function ($value) {
@@ -128,10 +127,13 @@ class Client extends QRFeedzResource
 
             MorphToMany::make('Authorizations', 'authorizations', Authorization::class)
                        ->fields(fn () => [
-                           FKLink::make('User', 'user_id', User::class)
+                           BelongsTo::make('User', 'user', AuthorizationUser::class)
                                  ->sortable(),
                        ])
                        ->nullable()
+                       ->canSee(function ($request) {
+                           return $request->user()->isSuperAdmin();
+                       })
                        ->collapsedByDefault(),
         ];
     }
