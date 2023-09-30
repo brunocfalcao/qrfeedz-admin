@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -31,7 +32,7 @@ class Client extends QRFeedzResource
     public static $model = \QRFeedz\Cube\Models\Client::class;
 
     public static $search = [
-        'name', 'vat_number', 'address', 'locality', 'postal_code',
+        'name', 'vat_number', 'address', 'city', 'postal_code',
     ];
 
     public function title()
@@ -46,31 +47,14 @@ class Client extends QRFeedzResource
         return $total.' '.Str::plural('questionnaire', $total);
     }
 
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        $user = $request->user();
-        $modelInstance = static::newModel();
-
-        // Super admin? Done.
-        if ($user->isSuperAdmin()) {
-            return $query;
-        }
-
-        // Affiliates can only see their own clients.
-        if ($user->isAffiliate()) {
-            return $query->where('user_affiliate_id', $user->id);
-        }
-
-        // Client admins can only see its own client.
-        if ($user->isAuthorizedAs($modelInstance, 'client-admin')) {
-            return $query->where('id', $user->client->id);
-        }
-    }
-
     public function fields(NovaRequest $request)
     {
         return [
             IDSuperAdmin::make(),
+
+            Image::make('Logo', 'file_logo')
+                 ->disableDownload()
+                 ->acceptedTypes('image/*'),
 
             Text::make('Name')
                 ->rules('required', 'max:255'),
@@ -86,11 +70,12 @@ class Client extends QRFeedzResource
 
             BelongsTo::make('Country', 'country', CountryResource::class)
                      ->readonlyIfViaResource()
+                     ->withoutTrashed()
                      ->exceptOnForms(),
 
             TRCountry::make('Country', 'country_id')
                      ->resolveUsing(function ($value) {
-                         return Country::firstWhere('id', $value)->name;
+                         return Country::firstWhere('id', $value)?->name;
                      })
                      ->fillUsing(function ($request, $model, $attribute, $requestAttribute) {
                          $model->{$attribute} = Country::firstWhere('name', $request->input($attribute))->id;

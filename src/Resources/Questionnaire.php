@@ -93,6 +93,10 @@ class Questionnaire extends QRFeedzResource
 
             UUID::make(),
 
+            Image::make('Logo', 'file_logo')
+                 ->disableDownload()
+                 ->acceptedTypes('image/*'),
+
             Text::make('Name')
                 ->rules('required'),
 
@@ -103,8 +107,6 @@ class Questionnaire extends QRFeedzResource
                      ->withoutTrashed(),
 
             Textarea::make('Description'),
-
-            Image::make('Logo', 'file_logo'),
 
             Boolean::make('Active?', 'is_active'),
 
