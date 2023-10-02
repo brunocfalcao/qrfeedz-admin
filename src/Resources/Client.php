@@ -9,7 +9,6 @@ use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Image;
-use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
@@ -125,16 +124,8 @@ class Client extends QRFeedzResource
 
             HasManyThrough::make('Questionnaires', 'questionnaires', Questionnaire::class),
 
-            MorphToMany::make('Authorizations', 'authorizations', Authorization::class)
-                       ->fields(fn () => [
-                           BelongsTo::make('User', 'user', AuthorizationUser::class)
-                                 ->sortable(),
-                       ])
-                       ->nullable()
-                       ->canSee(function ($request) {
-                           return $request->user()->isSuperAdmin();
-                       })
-                       ->collapsedByDefault(),
+            BelongsToMany::make('Related Authorizations', 'authorizations', Authorization::class),
+
         ];
     }
 }

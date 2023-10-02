@@ -5,13 +5,14 @@ namespace QRFeedz\Admin\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
-use Laravel\Nova\Fields\MorphedByMany;
+use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\Canonical;
-use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
+use QRFeedz\Cube\Models\User;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Authorization extends QRFeedzResource
@@ -32,8 +33,8 @@ class Authorization extends QRFeedzResource
     public function subtitle()
     {
         $total = DB::table('authorizables')
-                   ->where('authorization_id', $this->id)
-                   ->count();
+               ->where('authorization_id', $this->id)
+               ->count();
 
         return $total.' '.Str::plural('entity', $total);
     }
@@ -54,41 +55,18 @@ class Authorization extends QRFeedzResource
 
             new Panel('Last data activity', $this->timestamps($request)),
 
-            MorphedByMany::make('Related Clients / Users', 'clients', Client::class)
-                ->fields(fn () => [
-                    FKLink::make('User', 'user_id', User::class)
-                          ->sortable(),
+            BelongsToMany::make('Related Client Authorizations', 'clients', Client::class)
+                        ->fields(function ($request, $relatedModel) {
+                            return [
+                                Select::make('User', 'user_id')->options(
+                                    User::all()->pluck('name', 'id')
+                                )->onlyOnForms(),
 
-                    Text::make('Type', function ($data) {
-                        return Authorization::find($data->authorization_id)->name;
-                    })->asHtml(),
-                ])
-                ->nullable()
-                ->collapsedByDefault(),
-
-            MorphedByMany::make('Related Locations / Users', 'locations', Location::class)
-                ->fields(fn () => [
-                    FKLink::make('User', 'user_id', User::class)
-                          ->sortable(),
-
-                    Text::make('Type', function ($data) {
-                        return Authorization::find($data->authorization_id)->name;
-                    })->asHtml(),
-                ])
-                ->nullable()
-                ->collapsedByDefault(),
-
-            MorphedByMany::make('Related Questionnaires / Users', 'questionnaires', Questionnaire::class)
-                ->fields(fn () => [
-                    FKLink::make('User', 'user_id', User::class)
-                          ->sortable(),
-
-                    Text::make('Type', function ($data) {
-                        return Authorization::find($data->authorization_id)->name;
-                    })->asHtml(),
-                ])
-                ->nullable()
-                ->collapsedByDefault(),
+                                Text::make('User', 'user_id')->resolveUsing(function ($id) {
+                                    return User::firstWhere('id', $id)->name;
+                                })->onlyOnIndex(),
+                            ];
+                        }),
         ];
     }
 }
