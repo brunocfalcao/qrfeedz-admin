@@ -9,14 +9,18 @@ use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\BelongsToStrict;
+use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Resources\Country as CountryResource;
+use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Cube\Models\Country;
+use QRFeedz\Cube\Models\User;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 use Trinityrank\GoogleMapWithAutocomplete\TRAddress;
 use Trinityrank\GoogleMapWithAutocomplete\TRCity;
@@ -89,7 +93,7 @@ class Client extends QRFeedzResource
             Text::make('VAT number')
                 ->rules('max:255'),
 
-            BelongsTo::make('Affiliate', 'affiliate', User::class)
+            BelongsTo::make('Affiliate', 'affiliate', UserResource::class)
                      ->nullable()
                      ->relatableQueryUsing(function (NovaRequest $request, Builder $query) {
                          return $query->asAffiliate();
@@ -116,16 +120,25 @@ class Client extends QRFeedzResource
             HasMany::make('Locations', 'locations', Location::class)
                    ->collapsedByDefault(),
 
-            HasMany::make('Users', 'users', User::class)
+            HasMany::make('Users', 'users', UserResource::class)
                    ->collapsedByDefault(),
 
             BelongsToMany::make('Tags', 'tags', Tag::class)
                          ->collapsedByDefault(),
 
-            HasManyThrough::make('Questionnaires', 'questionnaires', Questionnaire::class),
+            HasManyThrough::make('Questionnaires', 'questionnaires', Questionnaire::class)
+                          ->collapsedByDefault(),
 
-            BelongsToMany::make('Related Authorizations', 'authorizations', Authorization::class),
+            BelongsToMany::make('Related User Authorizations', 'authorizations', Authorization::class)
+                        ->fields(function ($request, $relatedModel) {
+                            return [
+                                Select::make('User', 'user_id')->options(
+                                    User::all()->pluck('name', 'id')
+                                )->onlyOnForms(),
 
+                                FKLink::make('User', 'user_id', UserResource::class),
+                            ];
+                        }),
         ];
     }
 }

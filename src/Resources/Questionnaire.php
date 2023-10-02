@@ -4,6 +4,7 @@ namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\DateTime;
@@ -16,7 +17,6 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Fields\UUID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
@@ -138,13 +138,8 @@ class Questionnaire extends QRFeedzResource
                        ->nullable()
                        ->collapsedByDefault(),
 
-            MorphToMany::make('Authorizations', 'authorizations', Authorization::class)
-                       ->fields(fn () => [
-                           FKLink::make('User', 'user_id', User::class)
-                                 ->sortable(),
-                       ])
-                       ->nullable()
-                       ->collapsedByDefault(),
+            BelongsToMany::make('Related Authorizations', 'authorizations', Authorization::class)
+                         ->collapsedByDefault(),
         ];
     }
 }

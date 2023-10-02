@@ -3,14 +3,14 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\Canonical;
+use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Cube\Models\User;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -28,15 +28,6 @@ class Authorization extends QRFeedzResource
     public function title()
     {
         return $this->name;
-    }
-
-    public function subtitle()
-    {
-        $total = DB::table('authorizables')
-               ->where('authorization_id', $this->id)
-               ->count();
-
-        return $total.' '.Str::plural('entity', $total);
     }
 
     public function fields(Request $request)
@@ -62,9 +53,7 @@ class Authorization extends QRFeedzResource
                                     User::all()->pluck('name', 'id')
                                 )->onlyOnForms(),
 
-                                Text::make('User', 'user_id')->resolveUsing(function ($id) {
-                                    return User::firstWhere('id', $id)->name;
-                                })->onlyOnIndex(),
+                                FKLink::make('User', 'user_id', UserResource::class),
                             ];
                         }),
         ];

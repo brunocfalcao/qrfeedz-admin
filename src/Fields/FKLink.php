@@ -45,6 +45,7 @@ class FKLink extends Text
             return "<a class=\"link-default\" href='{$url}'>{$displayValue}</a>";
         });
 
+        $this->exceptOnForms();
         $this->asHtml();
     }
 }
