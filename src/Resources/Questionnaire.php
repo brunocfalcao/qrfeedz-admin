@@ -19,8 +19,8 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\FKLink;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
-use QRFeedz\Admin\Fields\UUID;
+use QRFeedz\Admin\Fields\QRID;
+use QRFeedz\Admin\Fields\QRUUID;
 use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Cube\Models\User;
@@ -93,11 +93,11 @@ class Questionnaire extends QRFeedzResource
     public function fields(NovaRequest $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
-            UUID::make(),
+            QRUUID::make(),
 
-            Image::make('Logo', 'file_logo')
+            Image::make('Logo', 'logo_file')
                  ->disableDownload()
                  ->acceptedTypes('image/*'),
 

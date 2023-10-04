@@ -7,8 +7,8 @@ use Illuminate\Support\Str;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\Canonical;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\QRCanonical;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -37,13 +37,13 @@ class Category extends QRFeedzResource
     public function fields(Request $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Canonical::make()
+            QRCanonical::make()
                 ->helpInfo('Please ensure that, if you change this value, you do not have it hard-coded somewhere!')
                 ->sortable(),
 

@@ -10,7 +10,7 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use QRFeedz\Admin\Fields\HumanDateTime;
+use QRFeedz\Admin\Fields\QRDateTime;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Cube\Models\Locale;
 
@@ -120,11 +120,11 @@ class User extends Resource
             HasMany::make('Affiliated Clients', 'affiliatedClients', Client::class)
                    ->canSee(fn () => $this->resource->isAffiliate()),
 
-            HumanDateTime::make('Created At'),
+            QRDateTime::make('Created At'),
 
-            HumanDateTime::make('Updated At'),
+            QRDateTime::make('Updated At'),
 
-            HumanDateTime::make('Deleted At')
+            QRDateTime::make('Deleted At')
                          ->canSee(fn ($request) => ! $request->findModel()->deleted_at == null),
         ];
     }

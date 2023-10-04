@@ -9,8 +9,7 @@ use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
-use QRFeedz\Admin\Fields\UUID;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class PageInstance extends QRFeedzResource
@@ -33,9 +32,9 @@ class PageInstance extends QRFeedzResource
     public function fields(NovaRequest $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
-            UUID::make(),
+            QRUUID::make(),
 
             BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
                      ->withoutTrashed(),

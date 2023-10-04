@@ -8,8 +8,8 @@ use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\Canonical;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\QRCanonical;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -37,13 +37,13 @@ class Locale extends QRFeedzResource
     public function fields(NovaRequest $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            Canonical::make()
+            QRCanonical::make()
                 ->sortable(),
 
             new Panel('Timestamps', $this->timestamps($request)),

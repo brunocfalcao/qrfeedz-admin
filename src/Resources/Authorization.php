@@ -7,9 +7,9 @@ use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\Canonical;
 use QRFeedz\Admin\Fields\FKLink;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\QRCanonical;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Cube\Models\User;
@@ -33,12 +33,12 @@ class Authorization extends QRFeedzResource
     public function fields(Request $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
             Text::make('Name')
                 ->rules('required', 'max:255'),
 
-            Canonical::make(),
+            QRCanonical::make(),
 
             Text::make('Description')
                 ->charLimit(50)
@@ -57,8 +57,6 @@ class Authorization extends QRFeedzResource
                            ];
                        })
                        ->canSee(function ($request) {
-                           info($this->canonical);
-
                            return str_starts_with($this->canonical, 'client');
                        }),
 

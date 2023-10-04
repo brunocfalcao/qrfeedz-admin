@@ -8,7 +8,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\BelongsToThrough;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -70,7 +70,7 @@ class Response extends QRFeedzResource
     public function fields(NovaRequest $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
             BelongsToThrough::make('Questionnaire', function () {
                 return $this->resource

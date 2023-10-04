@@ -7,7 +7,7 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -36,7 +36,7 @@ class Country extends QRFeedzResource
     public function fields(NovaRequest $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
             Text::make('Code')
                 ->hideFromIndex(),

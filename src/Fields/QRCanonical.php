@@ -6,7 +6,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 
-class Canonical extends Text
+class QRCanonical extends Text
 {
     public function __construct($name = 'Canonical', $attribute = 'canonical', callable $resolveCallback = null)
     {

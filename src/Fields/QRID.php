@@ -5,7 +5,7 @@ namespace QRFeedz\Admin\Fields;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class IDSuperAdmin extends ID
+class QRID extends ID
 {
     public function __construct($name = 'ID', $attribute = 'id', $resolveCallback = null)
     {

@@ -4,10 +4,10 @@ namespace QRFeedz\Admin\Fields;
 
 use Laravel\Nova\Fields\Text;
 
-class HumanDateTime extends Text
+class QRDateTime extends Text
 {
     /**
-     * Create a new HumanDateTime field.
+     * Create a new QRDateTime field.
      *
      * @param  string|null  $name
      * @param  string|null  $attribute

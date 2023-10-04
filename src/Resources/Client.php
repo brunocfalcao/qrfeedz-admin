@@ -14,9 +14,9 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\BelongsToStrict;
 use QRFeedz\Admin\Fields\FKLink;
-use QRFeedz\Admin\Fields\IDSuperAdmin;
+use QRFeedz\Admin\Fields\QRBelongsTo;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Resources\Country as CountryResource;
 use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
@@ -54,9 +54,9 @@ class Client extends QRFeedzResource
     public function fields(NovaRequest $request)
     {
         return [
-            IDSuperAdmin::make(),
+            QRID::make(),
 
-            Image::make('Logo', 'file_logo')
+            Image::make('Logo', 'logo_file')
                  ->disableDownload()
                  ->acceptedTypes('image/*'),
 
@@ -72,7 +72,7 @@ class Client extends QRFeedzResource
             TRCity::make('City')
                   ->hideFromIndex(),
 
-            BelongsToStrict::make('Country', 'country', CountryResource::class)
+            QRBelongsTo::make('Country', 'country', CountryResource::class)
                            ->withoutTrashed()
                            ->exceptOnForms(),
 

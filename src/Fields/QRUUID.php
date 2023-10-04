@@ -6,7 +6,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Nova;
 
-class UUID extends Text
+class QRUUID extends Text
 {
     public function __construct($name = 'UUID', $attribute = 'uuid', callable $resolveCallback = null)
     {
