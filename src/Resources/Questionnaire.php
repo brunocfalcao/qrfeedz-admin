@@ -23,8 +23,8 @@ use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Fields\UUID;
 use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
-use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 use QRFeedz\Cube\Models\User;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Questionnaire extends QRFeedzResource
 {
@@ -142,7 +142,7 @@ class Questionnaire extends QRFeedzResource
                        ->nullable()
                        ->collapsedByDefault(),
 
-            BelongsToMany::make('Related User Authorizations', 'authorizations', Authorization::class)
+            BelongsToMany::make('Authorizations')
                         ->fields(function ($request, $relatedModel) {
                             return [
                                 Select::make('User', 'user_id')->options(

@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -129,7 +130,7 @@ class Client extends QRFeedzResource
             HasManyThrough::make('Questionnaires', 'questionnaires', Questionnaire::class)
                           ->collapsedByDefault(),
 
-            BelongsToMany::make('Related User Authorizations', 'authorizations', Authorization::class)
+            MorphToMany::make('Authorizations')
                         ->fields(function ($request, $relatedModel) {
                             return [
                                 Select::make('User', 'user_id')->options(

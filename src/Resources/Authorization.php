@@ -3,7 +3,7 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsToMany;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
@@ -46,27 +46,35 @@ class Authorization extends QRFeedzResource
 
             new Panel('Last data activity', $this->timestamps($request)),
 
-            BelongsToMany::make('Related Client Authorizations', 'clients', Client::class)
-                        ->fields(function ($request, $relatedModel) {
-                            return [
-                                Select::make('User', 'user_id')->options(
-                                    User::all()->pluck('name', 'id')
-                                )->onlyOnForms(),
+            MorphToMany::make('Clients')
+                       ->fields(function ($request, $relatedModel) {
+                           return [
+                               Select::make('User', 'user_id')->options(
+                                   User::all()->pluck('name', 'id')
+                               )->onlyOnForms(),
 
-                                FKLink::make('User', 'user_id', UserResource::class),
-                            ];
-                        }),
+                               FKLink::make('User', 'user_id', UserResource::class),
+                           ];
+                       })
+                       ->canSee(function ($request) {
+                           info($this->canonical);
 
-            BelongsToMany::make('Related Questionnaire Authorizations', 'questionnaires', Questionnaire::class)
-                        ->fields(function ($request, $relatedModel) {
-                            return [
-                                Select::make('User', 'user_id')->options(
-                                    User::all()->pluck('name', 'id')
-                                )->onlyOnForms(),
+                           return str_starts_with($this->canonical, 'client');
+                       }),
 
-                                FKLink::make('User', 'user_id', UserResource::class),
-                            ];
-                        }),
+            MorphToMany::make('Questionnaires')
+                       ->fields(function ($request, $relatedModel) {
+                           return [
+                               Select::make('User', 'user_id')->options(
+                                   User::all()->pluck('name', 'id')
+                               )->onlyOnForms(),
+
+                               FKLink::make('User', 'user_id', UserResource::class),
+                           ];
+                       })
+                       ->canSee(function ($request) {
+                           return str_starts_with($this->canonical, 'questionnaire');
+                       }),
         ];
     }
 }
