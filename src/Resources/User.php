@@ -4,15 +4,19 @@ namespace QRFeedz\Admin\Resources;
 
 use App\Nova\Resource;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\HumanDateTime;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Cube\Models\Locale;
+use QRFeedz\Cube\Models\User as UserModel;
 
 class User extends Resource
 {

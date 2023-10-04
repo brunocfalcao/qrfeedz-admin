@@ -13,14 +13,18 @@ use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\MorphToMany;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\IDSuperAdmin;
 use QRFeedz\Admin\Fields\UUID;
+use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
+use QRFeedz\Cube\Models\User;
 
 class Questionnaire extends QRFeedzResource
 {
@@ -138,8 +142,16 @@ class Questionnaire extends QRFeedzResource
                        ->nullable()
                        ->collapsedByDefault(),
 
-            BelongsToMany::make('Related Authorizations', 'authorizations', Authorization::class)
-                         ->collapsedByDefault(),
+            BelongsToMany::make('Related User Authorizations', 'authorizations', Authorization::class)
+                        ->fields(function ($request, $relatedModel) {
+                            return [
+                                Select::make('User', 'user_id')->options(
+                                    User::all()->pluck('name', 'id')
+                                )->onlyOnForms(),
+
+                                FKLink::make('User', 'user_id', UserResource::class),
+                            ];
+                        }),
         ];
     }
 }

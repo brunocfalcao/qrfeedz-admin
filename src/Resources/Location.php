@@ -93,14 +93,6 @@ class Location extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class),
-
-            MorphToMany::make('Authorizations', 'authorizations', Authorization::class)
-                       ->fields(fn () => [
-                           FKLink::make('User', 'user_id', User::class)
-                                 ->sortable(),
-                       ])
-                       ->nullable()
-                       ->collapsedByDefault(),
         ];
     }
 }

@@ -56,6 +56,17 @@ class Authorization extends QRFeedzResource
                                 FKLink::make('User', 'user_id', UserResource::class),
                             ];
                         }),
+
+            BelongsToMany::make('Related Questionnaire Authorizations', 'questionnaires', Questionnaire::class)
+                        ->fields(function ($request, $relatedModel) {
+                            return [
+                                Select::make('User', 'user_id')->options(
+                                    User::all()->pluck('name', 'id')
+                                )->onlyOnForms(),
+
+                                FKLink::make('User', 'user_id', UserResource::class),
+                            ];
+                        }),
         ];
     }
 }
