@@ -8,7 +8,6 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -17,6 +16,7 @@ use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
+use QRFeedz\Admin\Fields\QRImage;
 use QRFeedz\Admin\Resources\Country as CountryResource;
 use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
@@ -56,7 +56,7 @@ class Client extends QRFeedzResource
         return [
             QRID::make(),
 
-            Image::make('Logo', 'logo_file')
+            QRImage::make('Logo', 'logo_file')
                  ->disableDownload()
                  ->acceptedTypes('image/*'),
 
