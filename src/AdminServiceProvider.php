@@ -22,6 +22,7 @@ use QRFeedz\Admin\Resources\Questionnaire;
 use QRFeedz\Admin\Resources\Response;
 use QRFeedz\Admin\Resources\Tag;
 use QRFeedz\Admin\Resources\User;
+use QRFeedz\Admin\Resources\UserAuthorization;
 use QRFeedz\Admin\Resources\Widget;
 use QRFeedz\Admin\Resources\WidgetInstance;
 use QRFeedz\Foundation\Abstracts\QRFeedzServiceProvider;
@@ -35,11 +36,11 @@ class AdminServiceProvider extends QRFeedzServiceProvider
         Nova::mainMenu(function (Request $request) {
             return [
                 MenuSection::make('Management', [
+                    MenuItem::resource(Client::class),
+                    MenuItem::resource(Location::class),
                     MenuItem::resource(Questionnaire::class),
                     MenuItem::resource(Response::class),
-                    MenuItem::resource(Location::class),
                     MenuItem::resource(User::class),
-                    MenuItem::resource(Client::class),
                 ])->icon('chart-bar')
                   ->canSee(function (NovaRequest $request) {
                       return
@@ -51,14 +52,15 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                   }),
 
                 MenuSection::make('System', [
-                    MenuItem::resource(QuestionInstance::class),
-                    MenuItem::resource(OpenAIPrompt::class),
                     MenuItem::resource(Authorization::class),
-                    MenuItem::resource(PageInstance::class),
                     MenuItem::resource(Category::class),
                     MenuItem::resource(Country::class),
                     MenuItem::resource(Locale::class),
                     MenuItem::resource(Page::class),
+                    MenuItem::resource(PageInstance::class),
+                    MenuItem::resource(QuestionInstance::class),
+                    MenuItem::resource(OpenAIPrompt::class),
+                    MenuItem::resource(UserAuthorization::class),
                 ])->icon('server')
                   ->canSee(function (NovaRequest $request) {
                       return $request->user()->isSuperAdmin();
@@ -83,6 +85,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             Response::class, // Added.
             Tag::class,
             Widget::class,
+            UserAuthorization::class, // Added.
         ]);
     }
 

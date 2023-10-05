@@ -3,13 +3,13 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Fields\QRUUID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
@@ -44,7 +44,7 @@ class QuestionInstance extends QRFeedzResource
 
             QRUUID::make(),
 
-            BelongsTo::make('Page instance', 'pageInstance', PageInstance::class)
+            QRBelongsTo::make('Page instance', 'pageInstance', PageInstance::class)
                      ->withoutTrashed(),
 
             Boolean::make('Is analytical?', 'is_analytical')

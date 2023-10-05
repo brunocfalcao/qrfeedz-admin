@@ -2,12 +2,12 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\BelongsToThrough;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -95,7 +95,7 @@ class Response extends QRFeedzResource
                        $questionInstance->captions->first()->pivot->caption;
             }),
 
-            BelongsTo::make('Question instance', 'questionInstance', QuestionInstance::class)
+            QRBelongsTo::make('Question instance', 'questionInstance', QuestionInstance::class)
                      ->withoutTrashed()
                      ->hideFromIndex(),
 

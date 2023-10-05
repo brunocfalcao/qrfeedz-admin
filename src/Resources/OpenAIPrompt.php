@@ -3,12 +3,12 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -71,7 +71,7 @@ class OpenAIPrompt extends QRFeedzResource
             Boolean::make('Should OpenAI be email-aware?', 'should_be_email_aware')
                    ->helpInfo('If it is, then a notification is sent to the questionnaire owner if an email is given by a visitor'),
 
-            BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
+            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 
             new Panel('Timestamps', $this->timestamps($request)),
         ];

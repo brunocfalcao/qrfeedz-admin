@@ -3,13 +3,13 @@
 namespace QRFeedz\Admin\Resources;
 
 use App\Nova\Resource;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRDateTime;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Cube\Models\Locale;
@@ -112,7 +112,7 @@ class User extends Resource
             Boolean::make('Is super admin?', 'is_super_admin')
                 ->canSee(fn ($request) => $request->user()->isSuperAdmin()),
 
-            BelongsTo::make('Client', 'client', Client::class)
+            QRBelongsTo::make('Client', 'client', Client::class)
                      ->readonlyIfViaResource()
                      ->nullable()
                      ->withoutTrashed(),
@@ -126,6 +126,8 @@ class User extends Resource
 
             QRDateTime::make('Deleted At')
                          ->canSee(fn ($request) => ! $request->findModel()->deleted_at == null),
+
+            HasMany::make('Authorizations', 'authorizations', UserAuthorization::class),
         ];
     }
 }

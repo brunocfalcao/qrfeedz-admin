@@ -4,7 +4,6 @@ namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
@@ -94,7 +93,7 @@ class Client extends QRFeedzResource
             Text::make('VAT number')
                 ->rules('max:255'),
 
-            BelongsTo::make('Affiliate', 'affiliate', UserResource::class)
+            QRBelongsTo::make('Affiliate', 'affiliate', UserResource::class)
                      ->nullable()
                      ->relatableQueryUsing(function (NovaRequest $request, Builder $query) {
                          return $query->asAffiliate();
@@ -112,7 +111,7 @@ class Client extends QRFeedzResource
                     })
                     ->withoutTrashed(),
 
-            BelongsTo::make('Locale', 'locale', Locale::class)
+            QRBelongsTo::make('Locale', 'locale', Locale::class)
                      ->withoutTrashed()
                      ->helpInfo('This is not only the default client locale but also a default locale for the questionnaires'),
 

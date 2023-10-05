@@ -3,11 +3,11 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Resources\Country as CountryResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
@@ -55,7 +55,7 @@ class Location extends QRFeedzResource
         return [
             QRID::make(),
 
-            BelongsTo::make('Client', 'client', Client::class),
+            QRBelongsTo::make('Client', 'client', Client::class),
 
             Text::make('Name')
                 ->rules('required', 'max:255'),
@@ -69,7 +69,7 @@ class Location extends QRFeedzResource
             TRCity::make('City')
                   ->hideFromIndex(),
 
-            BelongsTo::make('Country', 'country', CountryResource::class)
+            QRBelongsTo::make('Country', 'country', CountryResource::class)
                      ->readonlyIfViaResource()
                      ->exceptOnForms(),
 

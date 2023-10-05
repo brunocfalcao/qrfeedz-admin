@@ -3,7 +3,6 @@
 namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Color;
@@ -19,6 +18,7 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\FKLink;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Fields\QRUUID;
 use QRFeedz\Admin\Resources\User as UserResource;
@@ -107,7 +107,7 @@ class Questionnaire extends QRFeedzResource
             Text::make('Title')
                 ->rules('required'),
 
-            BelongsTo::make('Location', 'location', Location::class)
+            QRBelongsTo::make('Location', 'location', Location::class)
                      ->withoutTrashed(),
 
             Textarea::make('Description'),
@@ -128,10 +128,10 @@ class Questionnaire extends QRFeedzResource
             DateTime::make('Ending at', 'ends_at')
                      ->hideFromIndex(),
 
-            BelongsTo::make('Default locale', 'locale', Locale::class)
+            QRBelongsTo::make('Default locale', 'locale', Locale::class)
                      ->withoutTrashed(),
 
-            BelongsTo::make('Category', 'category', Category::class)
+            QRBelongsTo::make('Category', 'category', Category::class)
                      ->withoutTrashed(),
 
             HasMany::make('Page instances', 'pageInstances', PageInstance::class),

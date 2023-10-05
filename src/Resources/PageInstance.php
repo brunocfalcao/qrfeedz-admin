@@ -2,13 +2,13 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Fields\QRUUID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -37,13 +37,13 @@ class PageInstance extends QRFeedzResource
 
             QRUUID::make(),
 
-            BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
+            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
                      ->withoutTrashed(),
 
             Text::make('Name')
                 ->rules('required'),
 
-            BelongsTo::make('Page', 'page', Page::class)
+            QRBelongsTo::make('Page', 'page', Page::class)
                      ->withoutTrashed(),
 
             Text::make('View Component')
