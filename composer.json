@@ -19,7 +19,9 @@
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
         "brunocfalcao/qrfeedz-cube": "dev-master",
-        "brunocfalcao/qrfeedz-foundation": "dev-master"
+        "brunocfalcao/qrfeedz-foundation": "dev-master",
+        "titasgailius/search-relations": "^2.0",
+        "trinityrank/google-map-with-autocomplete": "^1.0"
     },
     "autoload": {
         "psr-4": {

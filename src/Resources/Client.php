@@ -38,6 +38,13 @@ class Client extends QRFeedzResource
         'name', 'vat_number', 'address', 'city', 'postal_code',
     ];
 
+    public static $searchRelations = [
+        'locale' => ['name'],
+        'country' => ['name'],
+        'locale' => ['name'],
+        'affiliate' => ['name'],
+    ];
+
     public function title()
     {
         return $this->name.' ('.$this->city.', '.$this->country->name.')';
