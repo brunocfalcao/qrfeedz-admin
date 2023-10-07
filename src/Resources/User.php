@@ -2,7 +2,6 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use App\Nova\Resource;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -13,8 +12,9 @@ use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRDateTime;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Cube\Models\Locale;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
-class User extends Resource
+class User extends QRFeedzResource
 {
     use DefaultDescPKSorting;
 
@@ -127,7 +127,7 @@ class User extends Resource
             QRDateTime::make('Deleted At')
                          ->canSee(fn ($request) => ! $request->findModel()->deleted_at == null),
 
-            HasMany::make('Authorizations', 'authorizations', UserAuthorization::class),
+            HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
         ];
     }
 }

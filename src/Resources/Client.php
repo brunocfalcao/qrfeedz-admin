@@ -7,12 +7,9 @@ use Illuminate\Support\Str;
 use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
-use Laravel\Nova\Fields\MorphToMany;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\FKLink;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Fields\QRImage;
@@ -79,8 +76,7 @@ class Client extends QRFeedzResource
                   ->hideFromIndex(),
 
             QRBelongsTo::make('Country', 'country', CountryResource::class)
-                           ->withoutTrashed()
-                           ->exceptOnForms(),
+                       ->exceptOnForms(),
 
             TRCountry::make('Country', 'country_id')
                      ->resolveUsing(function ($value) {
@@ -136,16 +132,8 @@ class Client extends QRFeedzResource
             HasManyThrough::make('Questionnaires', 'questionnaires', Questionnaire::class)
                           ->collapsedByDefault(),
 
-            MorphToMany::make('Authorizations')
-                        ->fields(function ($request, $relatedModel) {
-                            return [
-                                Select::make('User', 'user_id')->options(
-                                    User::all()->pluck('name', 'id')
-                                )->onlyOnForms(),
+            HasMany::make('Authorizations', 'authorizations', ClientAuthorization::class),
 
-                                FKLink::make('User', 'user_id', UserResource::class),
-                            ];
-                        }),
         ];
     }
 }
