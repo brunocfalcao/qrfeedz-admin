@@ -5,6 +5,7 @@ namespace QRFeedz\Admin\Resources;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRCanonical;
 use QRFeedz\Admin\Fields\QRID;
@@ -26,6 +27,24 @@ class Authorization extends QRFeedzResource
         return $this->name;
     }
 
+    public static function relatableQuery(NovaRequest $request, $query)
+    {
+        $segments = request()->segments();
+        /**
+         * Separate distinct authorization types by authorization
+         * canonical prefix.
+         */
+        if (in_array('client-authorizations', $segments)) {
+            return $query->where('canonical', 'like', 'client-%');
+        }
+
+        if (in_array('questionnaire-authorizations', $segments)) {
+            return $query->where('canonical', 'like', 'questionnaire-%');
+        }
+
+        return $query;
+    }
+
     public function fields(Request $request)
     {
         return [
@@ -44,6 +63,7 @@ class Authorization extends QRFeedzResource
 
             HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
 
+            HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class),
         ];
     }
 }

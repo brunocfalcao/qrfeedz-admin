@@ -128,6 +128,7 @@ class User extends QRFeedzResource
                          ->canSee(fn ($request) => ! $request->findModel()->deleted_at == null),
 
             HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
+            HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class),
         ];
     }
 }

@@ -20,6 +20,7 @@ use QRFeedz\Admin\Resources\Page;
 use QRFeedz\Admin\Resources\PageInstance;
 use QRFeedz\Admin\Resources\QuestionInstance;
 use QRFeedz\Admin\Resources\Questionnaire;
+use QRFeedz\Admin\Resources\QuestionnaireAuthorization;
 use QRFeedz\Admin\Resources\Response;
 use QRFeedz\Admin\Resources\Tag;
 use QRFeedz\Admin\Resources\User;
@@ -37,6 +38,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             return [
                 MenuSection::make('Management', [
                     MenuItem::resource(ClientAuthorization::class),
+                    MenuItem::resource(QuestionnaireAuthorization::class),
                     MenuItem::resource(Client::class),
                     MenuItem::resource(Location::class),
                     MenuItem::resource(Questionnaire::class),
@@ -86,6 +88,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             Tag::class,
             Widget::class,
             ClientAuthorization::class, // Added.
+            QuestionnaireAuthorization::class, // Added.
         ]);
     }
 

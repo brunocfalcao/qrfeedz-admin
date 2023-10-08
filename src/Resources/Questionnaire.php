@@ -142,16 +142,8 @@ class Questionnaire extends QRFeedzResource
                        ->nullable()
                        ->collapsedByDefault(),
 
-            BelongsToMany::make('Authorizations')
-                        ->fields(function ($request, $relatedModel) {
-                            return [
-                                Select::make('User', 'user_id')->options(
-                                    User::all()->pluck('name', 'id')
-                                )->onlyOnForms(),
+            HasMany::make('Authorizations', 'authorizations', QuestionnaireAuthorization::class),
 
-                                FKLink::make('User', 'user_id', UserResource::class),
-                            ];
-                        }),
         ];
     }
 }
