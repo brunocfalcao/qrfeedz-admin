@@ -35,10 +35,13 @@ class Authorization extends QRFeedzResource
          * canonical prefix.
          */
         if (in_array('client-authorizations', $segments)) {
-            return $query->where('canonical', 'like', 'client-%');
+            return
+                // Return all client related authorizations.
+                $query->where('canonical', 'like', 'client-%');
         }
 
         if (in_array('questionnaire-authorizations', $segments)) {
+            // Return all questionnaire related authorizations.
             return $query->where('canonical', 'like', 'questionnaire-%');
         }
 
