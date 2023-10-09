@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\QRCanonical;
+use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -43,7 +43,7 @@ class Category extends QRFeedzResource
                 ->sortable()
                 ->rules('required', 'max:255'),
 
-            QRCanonical::make()
+            Canonical::make()
                 ->helpInfo('Please ensure that, if you change this value, you do not have it hard-coded somewhere!')
                 ->sortable(),
 
@@ -52,6 +52,7 @@ class Category extends QRFeedzResource
 
             new Panel('Timestamps', $this->timestamps($request)),
 
+            // Relationship ID: 6
             HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
                    ->collapsedByDefault(),
         ];

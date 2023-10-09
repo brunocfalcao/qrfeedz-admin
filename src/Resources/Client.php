@@ -4,7 +4,6 @@ namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Text;
@@ -38,7 +37,6 @@ class Client extends QRFeedzResource
     public static $searchRelations = [
         'locale' => ['name'],
         'country' => ['name'],
-        'locale' => ['name'],
         'affiliate' => ['name'],
     ];
 
@@ -75,6 +73,7 @@ class Client extends QRFeedzResource
             TRCity::make('City')
                   ->hideFromIndex(),
 
+            // Relationship ID: 9
             QRBelongsTo::make('Country', 'country', CountryResource::class)
                        ->exceptOnForms(),
 
@@ -96,6 +95,7 @@ class Client extends QRFeedzResource
             Text::make('VAT number')
                 ->rules('max:255'),
 
+            // Relationship ID: 1
             QRBelongsTo::make('Affiliate', 'affiliate', UserResource::class)
                      ->nullable()
                      ->relatableQueryUsing(function (NovaRequest $request, Builder $query) {
@@ -114,24 +114,26 @@ class Client extends QRFeedzResource
                     })
                     ->withoutTrashed(),
 
+            // Relationship ID: 11
             QRBelongsTo::make('Locale', 'locale', Locale::class)
                      ->withoutTrashed()
                      ->helpInfo('This is not only the default client locale but also a default locale for the questionnaires'),
 
             new Panel('Timestamps', $this->timestamps($request)),
 
+            // Relationship ID: 5
             HasMany::make('Locations', 'locations', Location::class)
                    ->collapsedByDefault(),
 
+            // Relationship ID: 7
             HasMany::make('Users', 'users', UserResource::class)
                    ->collapsedByDefault(),
 
-            BelongsToMany::make('Tags', 'tags', Tag::class)
-                         ->collapsedByDefault(),
-
+            // Relationship ID: 30
             HasManyThrough::make('Questionnaires', 'questionnaires', Questionnaire::class)
                           ->collapsedByDefault(),
 
+            // Relationship ID: 34
             HasMany::make('Authorizations', 'authorizations', ClientAuthorization::class),
 
         ];

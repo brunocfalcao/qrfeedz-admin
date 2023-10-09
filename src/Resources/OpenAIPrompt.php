@@ -2,7 +2,6 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
@@ -36,18 +35,6 @@ class OpenAIPrompt extends QRFeedzResource
         return $query->orderBy('questionnaire_id', 'desc');
     }
 
-    public static function availableForNavigation(Request $request)
-    {
-        $user = $request->user();
-
-        return
-            // The user is an affiliate.
-            $user->isAffiliate() ||
-
-            // The user is a super admin.
-            $user->isSuperAdmin();
-    }
-
     public function fields(NovaRequest $request)
     {
         return [
@@ -71,6 +58,7 @@ class OpenAIPrompt extends QRFeedzResource
             Boolean::make('Should OpenAI be email-aware?', 'should_be_email_aware')
                    ->helpInfo('If it is, then a notification is sent to the questionnaire owner if an email is given by a visitor'),
 
+            // Relationship ID: 18
             QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 
             new Panel('Timestamps', $this->timestamps($request)),

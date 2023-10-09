@@ -7,7 +7,7 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\QRCanonical;
+use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -32,7 +32,7 @@ class Authorization extends QRFeedzResource
         $segments = request()->segments();
         /**
          * Separate distinct authorization types by authorization
-         * canonical prefix.
+         * canonical prefix, on this case by the viaResource.
          */
         if (in_array('client-authorizations', $segments)) {
             return
@@ -56,7 +56,7 @@ class Authorization extends QRFeedzResource
             Text::make('Name')
                 ->rules('required', 'max:255'),
 
-            QRCanonical::make(),
+            Canonical::make(),
 
             Text::make('Description')
                 ->charLimit(50)
@@ -64,8 +64,10 @@ class Authorization extends QRFeedzResource
 
             new Panel('Last data activity', $this->timestamps($request)),
 
+            // Relationship ID: 4
             HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
 
+            // Relationship ID: 29
             HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class),
         ];
     }

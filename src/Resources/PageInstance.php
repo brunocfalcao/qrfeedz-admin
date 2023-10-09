@@ -10,7 +10,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
-use QRFeedz\Admin\Fields\QRUUID;
+use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class PageInstance extends QRFeedzResource
@@ -35,14 +35,16 @@ class PageInstance extends QRFeedzResource
         return [
             QRID::make(),
 
-            QRUUID::make(),
+            UUID::make(),
 
+            // Relationship ID: 21
             QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
                      ->withoutTrashed(),
 
             Text::make('Name')
                 ->rules('required'),
 
+            // Relationship ID: 16
             QRBelongsTo::make('Page', 'page', Page::class)
                      ->withoutTrashed(),
 
@@ -64,6 +66,7 @@ class PageInstance extends QRFeedzResource
 
             new Panel('Timestamps', $this->timestamps($request)),
 
+            // Relationship ID: 24
             HasMany::make('Question instances', 'questionInstances', QuestionInstance::class)
                    ->collapsedByDefault(),
         ];

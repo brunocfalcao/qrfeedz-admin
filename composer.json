@@ -18,6 +18,7 @@
     "require": {
         "php": "^8.1",
         "illuminate/contracts": "^10.0",
+        "brunocfalcao/laravel-nova-helpers": "dev-master",
         "brunocfalcao/qrfeedz-cube": "dev-master",
         "brunocfalcao/qrfeedz-foundation": "dev-master",
         "titasgailius/search-relations": "^2.0",

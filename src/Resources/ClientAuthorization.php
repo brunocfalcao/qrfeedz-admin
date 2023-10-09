@@ -25,12 +25,15 @@ class ClientAuthorization extends QRFeedzResource
         return [
             QRID::make(),
 
+            // Relationship ID: 34
             BelongsTo::make('Client', 'client', Client::class)
                      ->readonlyIfViaResource('clients'),
 
+            // Relationship ID: 33
             BelongsTo::make('User', 'user', User::class)
                      ->readonlyIfViaResource('users'),
 
+            // Relationship ID: 4
             BelongsTo::make('Authorization', 'authorization', Authorization::class)
                      ->readonlyIfViaResource('authorizations'),
 

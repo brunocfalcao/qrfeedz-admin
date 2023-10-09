@@ -17,11 +17,6 @@ Field::macro('readonlyIfViaResource', function (string|array $resources = []) {
 
     return $this->readonly(function ($request) use ($resources) {
 
-        info('GET: '.$request->isMethod('get'));
-        info('Has ViaResource: '.str_boolean($request->has('viaResource')));
-        info('Resources: '.json_encode($resources));
-        info('Key eval: '.str_boolean(in_array($request->input('viaResource'), $resources)));
-
         return
             // HTTP method is GET.
             $request->isMethod('get') &&

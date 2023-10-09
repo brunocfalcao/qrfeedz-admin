@@ -2,7 +2,6 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\DateTime;
@@ -17,9 +16,8 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
-use QRFeedz\Admin\Fields\QRUUID;
+use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
-use QRFeedz\Cube\Models\User;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Questionnaire extends QRFeedzResource
@@ -66,21 +64,6 @@ class Questionnaire extends QRFeedzResource
         }
     }
 
-    public static function availableForNavigation(Request $request)
-    {
-        $user = $request->user();
-
-        return
-            // The user is an affiliate.
-            $user->isAffiliate() ||
-
-            // The user is a super admin.
-            $user->isSuperAdmin() ||
-
-            // The user has at least one "client admin" authorization.
-            $user->isAtLeastAuthorizedAs('client-admin');
-    }
-
     public static function softDeletes()
     {
         return false;
@@ -91,7 +74,7 @@ class Questionnaire extends QRFeedzResource
         return [
             QRID::make(),
 
-            QRUUID::make(),
+            UUID::make(),
 
             Image::make('Logo', 'logo_file')
                  ->disableDownload()
@@ -103,6 +86,7 @@ class Questionnaire extends QRFeedzResource
             Text::make('Title')
                 ->rules('required'),
 
+            // Relationship ID: 26
             QRBelongsTo::make('Location', 'location', Location::class)
                      ->withoutTrashed(),
 
@@ -118,28 +102,33 @@ class Questionnaire extends QRFeedzResource
 
             KeyValue::make('Data', 'data'),
 
-            DateTime::make('Started at', 'starts_at')
+            DateTime::make('Starts at', 'starts_at')
                     ->hideFromIndex(),
 
-            DateTime::make('Ending at', 'ends_at')
+            DateTime::make('Ends at', 'ends_at')
                      ->hideFromIndex(),
 
+            // Relationship ID: 14
             QRBelongsTo::make('Default locale', 'locale', Locale::class)
                      ->withoutTrashed(),
 
+            // Relationship ID: 6
             QRBelongsTo::make('Category', 'category', Category::class)
                      ->withoutTrashed(),
 
+            // Relationship ID: 21
             HasMany::make('Page instances', 'pageInstances', PageInstance::class),
 
+            // Relationship ID: 18
             HasOne::make('OpenAI Prompt', 'OpenAIPrompt', OpenAIPrompt::class),
 
+            // Relationship ID: 13
             MorphToMany::make('Tags', 'tags', Tag::class)
                        ->nullable()
                        ->collapsedByDefault(),
 
+            // Relationship ID: 31
             HasMany::make('Authorizations', 'authorizations', QuestionnaireAuthorization::class),
-
         ];
     }
 }

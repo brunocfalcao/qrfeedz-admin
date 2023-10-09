@@ -25,12 +25,15 @@ class QuestionnaireAuthorization extends QRFeedzResource
         return [
             QRID::make(),
 
+            // Relationship ID: 31
             BelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
                      ->readonlyIfViaResource('questionnaires'),
 
+            // Relationship ID: 32
             BelongsTo::make('User', 'user', User::class)
                      ->readonlyIfViaResource('users'),
 
+            // Relationship ID: 29
             BelongsTo::make('Authorization', 'authorization', Authorization::class)
                      ->readonlyIfViaResource('authorizations'),
 

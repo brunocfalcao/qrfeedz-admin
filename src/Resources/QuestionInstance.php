@@ -2,7 +2,6 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\MorphToMany;
@@ -11,7 +10,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
-use QRFeedz\Admin\Fields\QRUUID;
+use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -28,22 +27,14 @@ class QuestionInstance extends QRFeedzResource
         return 'Question '.$this->pageInstance->page->name.' instance';
     }
 
-    public static function availableForNavigation(Request $request)
-    {
-        $user = $request->user();
-
-        return
-            // The user is a super admin.
-            $user->isSuperAdmin();
-    }
-
     public function fields(NovaRequest $request)
     {
         return [
             QRID::make(),
 
-            QRUUID::make(),
+            UUID::make(),
 
+            // Relationship ID: 24
             QRBelongsTo::make('Page instance', 'pageInstance', PageInstance::class)
                      ->withoutTrashed(),
 
@@ -57,10 +48,13 @@ class QuestionInstance extends QRFeedzResource
 
             new Panel('Timestamps', $this->timestamps($request)),
 
+            // Relationship ID: 20
             HasMany::make('Widget instances', 'widgetInstances', WidgetInstance::class),
 
+            // Relationship ID: 19
             HasMany::make('Responses', 'responses', Response::class),
 
+            // Relationship ID: 15
             MorphToMany::make('Captions', 'captions', Locale::class)
                 ->fields(fn () => [
                     Text::make('Caption', 'caption'),

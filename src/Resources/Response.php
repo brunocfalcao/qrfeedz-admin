@@ -6,11 +6,11 @@ use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use QRFeedz\Admin\Fields\BelongsToThrough;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
+use QRFeedz\LaravelNovaHelpers\Fields\BelongsToThrough;
 
 class Response extends QRFeedzResource
 {
@@ -24,7 +24,7 @@ class Response extends QRFeedzResource
     {
         /**
          * If this response has question in english,
-         * then show the english locale, else the first index.
+         * then show the english locale, else the first locale index.
          */
         $questionInstance = $this->questionInstance;
 
@@ -72,6 +72,7 @@ class Response extends QRFeedzResource
         return [
             QRID::make(),
 
+            // Computed relationship.
             BelongsToThrough::make('Questionnaire', function () {
                 return $this->resource
                             ->questionInstance
@@ -79,14 +80,14 @@ class Response extends QRFeedzResource
                             ->questionnaire;
             }, Questionnaire::class),
 
+            // Computed relationship.
             BelongsToThrough::make('Page instance', function () {
                 return $this->questionInstance
                             ->pageInstance;
             }, PageInstance::class),
 
-            Text::make('Widget instance', function () {
-                return $this->widgetInstance->widget->name;
-            }),
+            // Relationship ID: 28
+            QRBelongsTo::make('Widget instance', 'widgetInstance', WidgetInstance::class),
 
             Text::make('Question caption', function () {
                 $questionInstance = $this->questionInstance;
@@ -95,6 +96,7 @@ class Response extends QRFeedzResource
                        $questionInstance->captions->first()->pivot->caption;
             }),
 
+            // Relationship ID: 19
             QRBelongsTo::make('Question instance', 'questionInstance', QuestionInstance::class)
                      ->withoutTrashed()
                      ->hideFromIndex(),

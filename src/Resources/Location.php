@@ -2,7 +2,6 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -36,25 +35,12 @@ class Location extends QRFeedzResource
         return $this->client->name;
     }
 
-    public static function availableForNavigation(Request $request)
-    {
-        $user = $request->user();
-
-        return
-            // The user is allowed admin access (client-admin, etc).
-            $user->isAllowedAdminAccess();
-    }
-
-    public static function softDeletes()
-    {
-        return false;
-    }
-
     public function fields(NovaRequest $request)
     {
         return [
             QRID::make(),
 
+            // Relationship ID: 5
             QRBelongsTo::make('Client', 'client', Client::class),
 
             Text::make('Name')
@@ -69,6 +55,7 @@ class Location extends QRFeedzResource
             TRCity::make('City')
                   ->hideFromIndex(),
 
+            // Relationship ID: 25
             QRBelongsTo::make('Country', 'country', CountryResource::class)
                      ->readonlyIfViaResource()
                      ->exceptOnForms(),
@@ -90,6 +77,7 @@ class Location extends QRFeedzResource
 
             new Panel('Timestamps', $this->timestamps($request)),
 
+            // Relationship ID: 26
             HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class),
         ];
     }
