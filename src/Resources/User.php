@@ -8,15 +8,17 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRDateTime;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
+use QRFeedz\Admin\Traits\HasAddressFields;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class User extends QRFeedzResource
 {
-    use DefaultDescPKSorting;
+    use DefaultDescPKSorting, HasAddressFields;
 
     public static $model = \QRFeedz\Cube\Models\User::class;
 
@@ -104,14 +106,21 @@ class User extends QRFeedzResource
 
             // Relationship ID: 7
             QRBelongsTo::make('Client', 'client', Client::class)
-                     ->readonlyIfViaResource('clients')
-                     ->nullable(),
+                     ->readonlyIfViaResource('clients'),
 
+            // Relationship ID: 27
             QRBelongsTo::make('Locale', 'locale', Locale::class)
                        ->readonlyIfViaResource('users'),
 
+            new Panel('Address Information', $this->addressFields()),
+
             Boolean::make('Is super admin?', 'is_super_admin')
+                ->helpInfo('Admin access including access to system resources and responses')
                 ->canSee(fn ($request) => $request->user()->isSuperAdmin()),
+
+            Boolean::make('Is admin?', 'is_admin')
+                ->helpInfo('Admin access, without access to system resources, neither to responses')
+                ->canSee(fn ($request) => $request->user()->isAdminLike()),
 
             // Relationship ID: 1
             HasMany::make('Affiliated Clients', 'affiliatedClients', Client::class)

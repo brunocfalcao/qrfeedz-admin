@@ -63,6 +63,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                     MenuItem::resource(PageInstance::class),
                     MenuItem::resource(QuestionInstance::class),
                     MenuItem::resource(OpenAIPrompt::class),
+                    MenuItem::resource(Tag::class),
                 ])->icon('server')
                   ->canSee(function (NovaRequest $request) {
                       return $request->user()->isSuperAdmin();
@@ -85,7 +86,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             QuestionInstance::class, // Added.
             WidgetInstance::class,
             Response::class, // Added.
-            Tag::class,
+            Tag::class, // Added.
             Widget::class,
             ClientAuthorization::class, // Added.
             QuestionnaireAuthorization::class, // Added.

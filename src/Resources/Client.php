@@ -12,21 +12,15 @@ use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Fields\QRImage;
-use QRFeedz\Admin\Resources\Country as CountryResource;
 use QRFeedz\Admin\Resources\User as UserResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
-use QRFeedz\Cube\Models\Country;
+use QRFeedz\Admin\Traits\HasAddressFields;
 use QRFeedz\Cube\Models\User;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
-use Trinityrank\GoogleMapWithAutocomplete\TRAddress;
-use Trinityrank\GoogleMapWithAutocomplete\TRCity;
-use Trinityrank\GoogleMapWithAutocomplete\TRCountry;
-use Trinityrank\GoogleMapWithAutocomplete\TRMap;
-use Trinityrank\GoogleMapWithAutocomplete\TRZipCode;
 
 class Client extends QRFeedzResource
 {
-    use DefaultDescPKSorting;
+    use DefaultDescPKSorting, HasAddressFields;
 
     public static $model = \QRFeedz\Cube\Models\Client::class;
 
@@ -64,34 +58,7 @@ class Client extends QRFeedzResource
             Text::make('Name')
                 ->rules('required', 'max:255'),
 
-            TRAddress::make('Address')
-                     ->rules('required'),
-
-            TRZipCode::make('Zip Code', 'postal_code')
-                     ->hideFromIndex(),
-
-            TRCity::make('City')
-                  ->hideFromIndex(),
-
-            // Relationship ID: 9
-            QRBelongsTo::make('Country', 'country', CountryResource::class)
-                       ->readonlyIfViaResource('clients')
-                       ->exceptOnForms(),
-
-            TRCountry::make('Country', 'country_id')
-                     ->resolveUsing(function ($value) {
-                         return Country::firstWhere('id', $value)?->name;
-                     })
-                     ->fillUsing(function ($request, $model, $attribute, $requestAttribute) {
-                         $model->{$attribute} = Country::firstWhere('name', $request->input($attribute))->id;
-                     })
-                     ->onlyOnForms()
-                     ->rules('required'),
-
-            TRMap::make('Map')
-                 ->hideLatitude()
-                 ->hideLongitude()
-                 ->onlyOnForms(),
+            new Panel('Address Information', $this->addressFields()),
 
             Text::make('VAT number')
                 ->rules('max:255'),

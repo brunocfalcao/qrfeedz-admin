@@ -19,15 +19,16 @@ Field::macro('readonlyIfViaResource', function (string|array $resources = []) {
 
         return
             // HTTP method is GET.
-            $request->isMethod('get') &&
+            $request->isMethod('GET') &&
 
-            // There is a query key 'viaResource'
+            // There is a query key 'viaResource'.
             $request->has('viaResource') &&
 
-            (
-                // ViaResource is one of the parameter array values.
-                in_array($request->input('viaResource'), $resources)
-            );
+            // And that viaResource key is not blank.
+            ! blank($request->input('viaResource')) &&
+
+            // ViaResource value is one of the argument array values.
+            in_array($request->input('viaResource'), $resources);
     });
 });
 

@@ -2,13 +2,15 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use App\Nova\Resource;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphedByMany;
+use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRID;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
-class Tag extends Resource
+class Tag extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\Tag::class;
 
@@ -22,6 +24,13 @@ class Tag extends Resource
     {
         return [
             QRID::make(),
+
+            Text::make('Name')
+                ->rules('required'),
+
+            Text::make('Description'),
+
+            new Panel('Last data activity', $this->timestamps($request)),
 
             // Relationship ID: 13
             MorphedByMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
