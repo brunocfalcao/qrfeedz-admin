@@ -2,11 +2,11 @@
 
 namespace QRFeedz\Admin\Resources;
 
+use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;

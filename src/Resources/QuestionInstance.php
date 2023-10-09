@@ -2,6 +2,7 @@
 
 namespace QRFeedz\Admin\Resources;
 
+use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\MorphToMany;
@@ -10,7 +11,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
-use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -36,7 +36,7 @@ class QuestionInstance extends QRFeedzResource
 
             // Relationship ID: 24
             QRBelongsTo::make('Page instance', 'pageInstance', PageInstance::class)
-                     ->withoutTrashed(),
+                       ->readonlyIfViaResource('question-instances'),
 
             Boolean::make('Is analytical?', 'is_analytical')
                    ->helpInfo('If the question instance value will be used for reports.<br/>If it is not then it can be to display a message, or to capture custom information'),

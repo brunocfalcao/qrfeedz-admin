@@ -10,8 +10,8 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRDateTime;
+use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
-use QRFeedz\Cube\Models\Locale;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class User extends QRFeedzResource
@@ -54,8 +54,10 @@ class User extends QRFeedzResource
 
         return $query->where(function ($query) use ($user) {
             if ($user->isAuthorizedAs($user->client, 'client-admin')) {
+                // Adds all the users part of his client.
                 $query->where('client_id', $user->client_id);
             }
+            // Adds himself to the indexQuery.
             $query->orWhere('id', $user->id);
         });
     }
@@ -63,9 +65,7 @@ class User extends QRFeedzResource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()
-                ->sortable()
-                ->canSee(fn () => $request->user()->isSuperAdmin()),
+            QRID::make(),
 
             Text::make('Name')
                 ->sortable()
@@ -102,21 +102,18 @@ class User extends QRFeedzResource
                     $model->id == $user->id;
                 }),
 
-            Text::make(
-                'Preferred Locale',
-                fn () => Locale::where('canonical', $this->preferredLocale())
-                             ->first()
-                             ->name
-            )->onlyOnDetail(),
+            // Relationship ID: 7
+            QRBelongsTo::make('Client', 'client', Client::class)
+                     ->readonlyIfViaResource('clients')
+                     ->nullable(),
+
+            QRBelongsTo::make('Locale', 'locale', Locale::class)
+                       ->readonlyIfViaResource('users'),
 
             Boolean::make('Is super admin?', 'is_super_admin')
                 ->canSee(fn ($request) => $request->user()->isSuperAdmin()),
 
-            QRBelongsTo::make('Client', 'client', Client::class)
-                     ->readonlyIfViaResource()
-                     ->nullable()
-                     ->withoutTrashed(),
-
+            // Relationship ID: 1
             HasMany::make('Affiliated Clients', 'affiliatedClients', Client::class)
                    ->canSee(fn () => $this->resource->isAffiliate()),
 
@@ -127,7 +124,10 @@ class User extends QRFeedzResource
             QRDateTime::make('Deleted At')
                          ->canSee(fn ($request) => ! $request->findModel()->deleted_at == null),
 
+            // Relationship ID: 33
             HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
+
+            // Relationship ID: 32
             HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class),
         ];
     }

@@ -75,6 +75,7 @@ class Client extends QRFeedzResource
 
             // Relationship ID: 9
             QRBelongsTo::make('Country', 'country', CountryResource::class)
+                       ->readonlyIfViaResource('clients')
                        ->exceptOnForms(),
 
             TRCountry::make('Country', 'country_id')
@@ -97,6 +98,7 @@ class Client extends QRFeedzResource
 
             // Relationship ID: 1
             QRBelongsTo::make('Affiliate', 'affiliate', UserResource::class)
+                     ->readonlyIfViaResource('clients')
                      ->nullable()
                      ->relatableQueryUsing(function (NovaRequest $request, Builder $query) {
                          return $query->asAffiliate();
@@ -111,11 +113,11 @@ class Client extends QRFeedzResource
                      })
                     ->readonly(function ($request) {
                         return ! $request->user()->isSuperAdmin();
-                    })
-                    ->withoutTrashed(),
+                    }),
 
             // Relationship ID: 11
             QRBelongsTo::make('Locale', 'locale', Locale::class)
+                     ->readonlyIfViaResource('clients')
                      ->withoutTrashed()
                      ->helpInfo('This is not only the default client locale but also a default locale for the questionnaires'),
 

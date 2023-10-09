@@ -2,6 +2,7 @@
 
 namespace QRFeedz\Admin\Resources;
 
+use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\DateTime;
@@ -16,7 +17,6 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
-use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -88,7 +88,7 @@ class Questionnaire extends QRFeedzResource
 
             // Relationship ID: 26
             QRBelongsTo::make('Location', 'location', Location::class)
-                     ->withoutTrashed(),
+                     ->readonlyIfViaResource('questionnaires'),
 
             Textarea::make('Description'),
 

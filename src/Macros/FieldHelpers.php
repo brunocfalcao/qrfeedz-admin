@@ -26,10 +26,7 @@ Field::macro('readonlyIfViaResource', function (string|array $resources = []) {
 
             (
                 // ViaResource is one of the parameter array values.
-                in_array($request->input('viaResource'), $resources) ||
-
-                // No parameter value? Then always true, meaning via ANY resource.
-                $resources == []
+                in_array($request->input('viaResource'), $resources)
             );
     });
 });

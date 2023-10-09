@@ -87,7 +87,8 @@ class Response extends QRFeedzResource
             }, PageInstance::class),
 
             // Relationship ID: 28
-            QRBelongsTo::make('Widget instance', 'widgetInstance', WidgetInstance::class),
+            QRBelongsTo::make('Widget instance', 'widgetInstance', WidgetInstance::class)
+                       ->readonlyIfViaResource('responses'),
 
             Text::make('Question caption', function () {
                 $questionInstance = $this->questionInstance;
@@ -98,7 +99,7 @@ class Response extends QRFeedzResource
 
             // Relationship ID: 19
             QRBelongsTo::make('Question instance', 'questionInstance', QuestionInstance::class)
-                     ->withoutTrashed()
+                     ->readonlyIfViaResource('responses')
                      ->hideFromIndex(),
 
             Text::make('Computed value(s)', function () {
