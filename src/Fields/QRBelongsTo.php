@@ -10,6 +10,7 @@ class QRBelongsTo extends BelongsTo
     {
         parent::__construct($name, $attribute, $resource);
 
+        $this->searchable();
         $this->withoutTrashed();
     }
 }

@@ -29,18 +29,17 @@ class Authorization extends QRFeedzResource
 
     public static function relatableQuery(NovaRequest $request, $query)
     {
-        $segments = request()->segments();
         /**
          * Separate distinct authorization types by authorization
          * canonical prefix, on this case by the viaResource.
          */
-        if (in_array('client-authorizations', $segments)) {
+        if (via_resource('client-authorizations')) {
             return
                 // Return all client related authorizations.
                 $query->where('canonical', 'like', 'client-%');
         }
 
-        if (in_array('questionnaire-authorizations', $segments)) {
+        if (via_resource('questionnaire-authorizations')) {
             // Return all questionnaire related authorizations.
             return $query->where('canonical', 'like', 'questionnaire-%');
         }
@@ -65,10 +64,16 @@ class Authorization extends QRFeedzResource
             new Panel('Last data activity', $this->timestamps($request)),
 
             // Relationship ID: 4
-            HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
+            HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class)
+                   ->canSee(function ($request) {
+                       return str_starts_with($this->canonical, 'client');
+                   }),
 
             // Relationship ID: 29
-            HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class),
+            HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class)
+                   ->canSee(function ($request) {
+                       return str_starts_with($this->canonical, 'questionnaire');
+                   }),
         ];
     }
 }

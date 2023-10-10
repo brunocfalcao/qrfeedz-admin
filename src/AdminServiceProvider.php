@@ -5,6 +5,7 @@ namespace QRFeedz\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Menu\MenuGroup;
 use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
@@ -36,9 +37,19 @@ class AdminServiceProvider extends QRFeedzServiceProvider
 
         Nova::mainMenu(function (Request $request) {
             return [
-                MenuSection::make('Management', [
-                    MenuItem::resource(ClientAuthorization::class),
-                    MenuItem::resource(QuestionnaireAuthorization::class),
+                MenuSection::make('Main Menu', [
+                    MenuItem::resource(Client::class),
+                    MenuItem::resource(Location::class),
+                    MenuItem::resource(Questionnaire::class),
+                    MenuItem::resource(User::class),
+                ])->icon('chart-bar')
+                  ->canSee(function (NovaRequest $request) {
+                      return
+                       // User is affiliate
+                       $request->user()->isAffiliate();
+                  }),
+
+                MenuSection::make('Main Menu', [
                     MenuItem::resource(Client::class),
                     MenuItem::resource(Location::class),
                     MenuItem::resource(Questionnaire::class),
@@ -47,23 +58,68 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                 ])->icon('chart-bar')
                   ->canSee(function (NovaRequest $request) {
                       return
-                            // User is super admin.
-                            $request->user()->isSuperAdmin() ||
-
                              // User is client-admin.
                              $request->user()->isAtLeastAuthorizedAs('client-admin');
                   }),
 
-                MenuSection::make('System', [
-                    MenuItem::resource(Authorization::class),
-                    MenuItem::resource(Category::class),
-                    MenuItem::resource(Country::class),
-                    MenuItem::resource(Locale::class),
-                    MenuItem::resource(Page::class),
+                MenuSection::make('Main Menu', [
+                    MenuItem::resource(Questionnaire::class),
+                    MenuItem::resource(Response::class),
+                ])->icon('chart-bar')
+                  ->canSee(function (NovaRequest $request) {
+                      return
+                             // User is client-admin.
+                             $request->user()->isAtLeastAuthorizedAs('questionnaire-admin');
+                  }),
+
+                MenuSection::make('Main Menu', [
+                    MenuItem::resource(ClientAuthorization::class),
+                    MenuItem::resource(QuestionnaireAuthorization::class),
                     MenuItem::resource(PageInstance::class),
                     MenuItem::resource(QuestionInstance::class),
                     MenuItem::resource(OpenAIPrompt::class),
                     MenuItem::resource(Tag::class),
+                    MenuItem::resource(WidgetInstance::class),
+                ])->icon('server')
+                  ->canSee(function (NovaRequest $request) {
+                      return $request->user()->isAdmin();
+                  }),
+
+                MenuSection::make('Main Menu', [
+                    MenuGroup::make('Authorizations', [
+                        MenuItem::resource(Authorization::class),
+                        MenuItem::resource(ClientAuthorization::class),
+                        MenuItem::resource(QuestionnaireAuthorization::class)
+                                ->name('Quest. Authorizations'),
+                    ])->collapsable()
+                      ->collapsedByDefault(),
+
+                    MenuGroup::make('Runtime', [
+                        MenuItem::resource(Client::class),
+                        MenuItem::resource(Location::class),
+                        MenuItem::resource(Questionnaire::class),
+                        MenuItem::resource(User::class),
+                        MenuItem::resource(Response::class),
+                        MenuItem::resource(Tag::class),
+                    ])->collapsable()
+                      ->collapsedByDefault(),
+
+                    MenuGroup::make('Admin', [
+                        MenuItem::resource(OpenAIPrompt::class),
+                        MenuItem::resource(PageInstance::class),
+                        MenuItem::resource(QuestionInstance::class),
+                        MenuItem::resource(WidgetInstance::class),
+                    ])->collapsable()
+                      ->collapsedByDefault(),
+
+                    MenuGroup::make('System', [
+                        MenuItem::resource(Category::class),
+                        MenuItem::resource(Country::class),
+                        MenuItem::resource(Locale::class),
+                        MenuItem::resource(Page::class),
+                        MenuItem::resource(Widget::class),
+                    ])->collapsable()
+                      ->collapsedByDefault(),
                 ])->icon('server')
                   ->canSee(function (NovaRequest $request) {
                       return $request->user()->isSuperAdmin();
@@ -72,7 +128,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
         });
 
         Nova::resources([
-            User::class,
+            User::class, // Added.
             Country::class, // Added.
             Authorization::class, // Added.
             Category::class, // Added.
@@ -87,7 +143,8 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             WidgetInstance::class,
             Response::class, // Added.
             Tag::class, // Added.
-            Widget::class,
+            Widget::class, // Added.
+            WidgetInstance::class, // Added.
             ClientAuthorization::class, // Added.
             QuestionnaireAuthorization::class, // Added.
         ]);

@@ -31,6 +31,7 @@ class QuestionnaireAuthorization extends QRFeedzResource
 
             // Relationship ID: 32
             BelongsTo::make('User', 'user', User::class)
+                     ->searchable()
                      ->readonlyIfViaResource('users'),
 
             // Relationship ID: 29

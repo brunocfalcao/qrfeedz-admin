@@ -37,7 +37,7 @@ class Response extends QRFeedzResource
         $user = $request->user();
 
         // Admin-like? Return all responses.
-        if ($user->isAdminLike()) {
+        if ($user->isSystemAdminLike()) {
             return $query;
         }
 

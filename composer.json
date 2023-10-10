@@ -27,10 +27,7 @@
     "autoload": {
         "psr-4": {
             "QRFeedz\\Admin\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+        }
     },
     "config": {
         "optimize-autoloader": true,

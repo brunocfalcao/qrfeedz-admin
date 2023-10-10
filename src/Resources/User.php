@@ -120,7 +120,7 @@ class User extends QRFeedzResource
 
             Boolean::make('Is admin?', 'is_admin')
                 ->helpInfo('Admin access, without access to system resources, neither to responses')
-                ->canSee(fn ($request) => $request->user()->isAdminLike()),
+                ->canSee(fn ($request) => $request->user()->isSystemAdminLike()),
 
             // Relationship ID: 1
             HasMany::make('Affiliated Clients', 'affiliatedClients', Client::class)

@@ -12,7 +12,7 @@ class WidgetInstance extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\WidgetInstance::class;
 
-    public static $title = 'id';
+    public static $title = 'uuid';
 
     public static $search = [
         'id',

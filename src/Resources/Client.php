@@ -65,6 +65,7 @@ class Client extends QRFeedzResource
 
             // Relationship ID: 1
             QRBelongsTo::make('Affiliate', 'affiliate', UserResource::class)
+                     ->searchable()
                      ->readonlyIfViaResource('clients')
                      ->nullable()
                      ->relatableQueryUsing(function (NovaRequest $request, Builder $query) {
