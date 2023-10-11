@@ -20,9 +20,9 @@
         "illuminate/contracts": "^10.0",
         "brunocfalcao/laravel-nova-helpers": "dev-master",
         "brunocfalcao/qrfeedz-cube": "dev-master",
-        "brunocfalcao/qrfeedz-foundation": "dev-master",
         "titasgailius/search-relations": "^2.0",
-        "trinityrank/google-map-with-autocomplete": "^1.0"
+        "trinityrank/google-map-with-autocomplete": "^1.0",
+        "laravel/nova": "^4.27"
     },
     "autoload": {
         "psr-4": {

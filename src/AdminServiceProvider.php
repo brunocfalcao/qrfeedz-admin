@@ -33,7 +33,17 @@ class AdminServiceProvider extends QRFeedzServiceProvider
 {
     public function boot()
     {
+
+        $this->loadViewsFrom(
+            __DIR__.'/../resources/views',
+            'qrfeedz-admin'
+        );
+
         $this->registerMacros();
+
+        Nova::footer(function ($request) {
+            return view('qrfeedz-admin::partials.footer')->render();
+        });
 
         Nova::mainMenu(function (Request $request) {
             return [
