@@ -22,6 +22,7 @@
         "brunocfalcao/qrfeedz-cube": "dev-master",
         "titasgailius/search-relations": "^2.0",
         "trinityrank/google-map-with-autocomplete": "^1.0",
+        "brunocfalcao/qrfeedz-admin-theme": "dev-master",
         "laravel/nova": "^4.27"
     },
     "autoload": {
