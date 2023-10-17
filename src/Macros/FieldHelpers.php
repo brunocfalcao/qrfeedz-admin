@@ -2,7 +2,6 @@
 
 namespace QRFeedz\Admin\Macros;
 
-use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Field;
 
 Field::macro('charLimit', function ($limit) {
@@ -12,11 +11,11 @@ Field::macro('charLimit', function ($limit) {
         }
 
         $breakpoint = strpos($value, ' ', $limit);
-        if (false === $breakpoint) {
+        if ($breakpoint === false) {
             return $value;
         }
 
-        return substr($value, 0, $breakpoint) . ' [...]';
+        return substr($value, 0, $breakpoint).' [...]';
     });
 });
 

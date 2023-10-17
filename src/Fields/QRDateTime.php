@@ -21,26 +21,26 @@ class QRDateTime extends Text
              ->hideFromIndex()
              ->hideWhenCreating()
              ->resolveUsing(function ($value) {
-                return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
+                 return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
              });
-             /*
-             ->resolveContextAware([
-                 'index' => function ($value) {
-                     return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
-                 },
+        /*
+        ->resolveContextAware([
+            'index' => function ($value) {
+                return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
+            },
 
-                 'detail' => function ($value) {
-                     return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
-                 },
+            'detail' => function ($value) {
+                return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
+            },
 
-                 'create' => function ($value) {
-                     return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
-                 },
+            'create' => function ($value) {
+                return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
+            },
 
-                 'update' => function ($value) {
-                     return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
-                 },
-             ]);
-             */
+            'update' => function ($value) {
+                return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
+            },
+        ]);
+        */
     }
 }
