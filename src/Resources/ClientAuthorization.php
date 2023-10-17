@@ -27,12 +27,10 @@ class ClientAuthorization extends QRFeedzResource
 
             // Relationship ID: 34
             BelongsTo::make('Client', 'client', Client::class)
-                     ->searchable()
                      ->readonlyIfViaResource('clients'),
 
             // Relationship ID: 33
             BelongsTo::make('User', 'user', User::class)
-                     ->searchable()
                      ->readonlyIfViaResource('users'),
 
             // Relationship ID: 4

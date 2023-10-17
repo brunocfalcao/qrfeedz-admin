@@ -20,6 +20,10 @@ class QRDateTime extends Text
         $this->readonly()
              ->hideFromIndex()
              ->hideWhenCreating()
+             ->resolveUsing(function ($value) {
+                return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
+             });
+             /*
              ->resolveContextAware([
                  'index' => function ($value) {
                      return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
@@ -37,5 +41,6 @@ class QRDateTime extends Text
                      return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
                  },
              ]);
+             */
     }
 }
