@@ -3,11 +3,11 @@
 namespace QRFeedz\Admin\Resources;
 
 use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -39,15 +39,15 @@ class Locale extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 11
-            HasMany::make('Clients', 'clients', Client::class)
+            QRHasMany::make('Clients', 'clients', Client::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 14
-            HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
+            QRHasMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 27
-            HasMany::make('Users', 'users', User::class)
+            QRHasMany::make('Users', 'users', User::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 15

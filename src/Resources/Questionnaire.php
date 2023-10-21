@@ -6,7 +6,6 @@ use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\DateTime;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\KeyValue;
@@ -16,6 +15,7 @@ use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -117,7 +117,7 @@ class Questionnaire extends QRFeedzResource
                      ->withoutTrashed(),
 
             // Relationship ID: 21
-            HasMany::make('Page instances', 'pageInstances', PageInstance::class),
+            QRHasMany::make('Page instances', 'pageInstances', PageInstance::class),
 
             // Relationship ID: 18
             HasOne::make('OpenAI Prompt', 'OpenAIPrompt', OpenAIPrompt::class),
@@ -128,7 +128,7 @@ class Questionnaire extends QRFeedzResource
                        ->collapsedByDefault(),
 
             // Relationship ID: 31
-            HasMany::make('Authorizations', 'authorizations', QuestionnaireAuthorization::class),
+            QRHasMany::make('Authorizations', 'authorizations', QuestionnaireAuthorization::class),
         ];
     }
 }

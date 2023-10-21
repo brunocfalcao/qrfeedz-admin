@@ -3,10 +3,10 @@
 namespace QRFeedz\Admin\Resources;
 
 use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -45,7 +45,7 @@ class Page extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 16
-            HasMany::make('Page instances', 'pageInstances', PageInstance::class),
+            QRHasMany::make('Page instances', 'pageInstances', PageInstance::class),
         ];
     }
 }

@@ -4,12 +4,12 @@ namespace QRFeedz\Admin\Resources;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasManyThrough;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Fields\QRImage;
 use QRFeedz\Admin\Resources\User as UserResource;
@@ -91,11 +91,11 @@ class Client extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 5
-            HasMany::make('Locations', 'locations', Location::class)
+            QRHasMany::make('Locations', 'locations', Location::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 7
-            HasMany::make('Users', 'users', UserResource::class)
+            QRHasMany::make('Users', 'users', UserResource::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 30
@@ -103,7 +103,7 @@ class Client extends QRFeedzResource
                           ->collapsedByDefault(),
 
             // Relationship ID: 34
-            HasMany::make('Authorizations', 'authorizations', ClientAuthorization::class),
+            QRHasMany::make('Authorizations', 'authorizations', ClientAuthorization::class),
 
         ];
     }

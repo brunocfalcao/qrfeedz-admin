@@ -3,13 +3,13 @@
 namespace QRFeedz\Admin\Resources;
 
 use Brunocfalcao\LaravelNovaHelpers\Fields\UUID;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\KeyValue;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -67,7 +67,7 @@ class PageInstance extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 24
-            HasMany::make('Question instances', 'questionInstances', QuestionInstance::class)
+            QRHasMany::make('Question instances', 'questionInstances', QuestionInstance::class)
                    ->collapsedByDefault(),
         ];
     }

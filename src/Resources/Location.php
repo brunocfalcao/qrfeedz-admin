@@ -2,11 +2,11 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Resources\Country as CountryResource;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
@@ -79,7 +79,7 @@ class Location extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 26
-            HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class),
+            QRHasMany::make('Questionnaires', 'questionnaires', Questionnaire::class),
         ];
     }
 }

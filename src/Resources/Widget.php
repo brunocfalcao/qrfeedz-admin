@@ -3,9 +3,9 @@
 namespace QRFeedz\Admin\Resources;
 
 use App\Nova\Resource;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 
 class Widget extends Resource
@@ -24,7 +24,7 @@ class Widget extends Resource
             QRID::make(),
 
             // Relationship ID: 22
-            HasMany::make('Widget instances', 'widgetInstances', WidgetInstance::class),
+            QRHasMany::make('Widget instances', 'widgetInstances', WidgetInstance::class),
         ];
     }
 }

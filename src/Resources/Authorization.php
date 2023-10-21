@@ -4,10 +4,10 @@ namespace QRFeedz\Admin\Resources;
 
 use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -64,13 +64,13 @@ class Authorization extends QRFeedzResource
             new Panel('Last data activity', $this->timestamps($request)),
 
             // Relationship ID: 4
-            HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class)
+            QRHasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class)
                    ->canSee(function ($request) {
                        return str_starts_with($this->canonical, 'client');
                    }),
 
             // Relationship ID: 29
-            HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class)
+            QRHasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class)
                    ->canSee(function ($request) {
                        return str_starts_with($this->canonical, 'questionnaire');
                    }),

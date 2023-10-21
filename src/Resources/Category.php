@@ -5,9 +5,9 @@ namespace QRFeedz\Admin\Resources;
 use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
@@ -53,7 +53,7 @@ class Category extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 6
-            HasMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
+            QRHasMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
                    ->collapsedByDefault(),
         ];
     }

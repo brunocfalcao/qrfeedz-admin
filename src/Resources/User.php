@@ -3,7 +3,6 @@
 namespace QRFeedz\Admin\Resources;
 
 use Laravel\Nova\Fields\Boolean;
-use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
@@ -11,6 +10,7 @@ use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRDateTime;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Traits\DefaultDescPKSorting;
 use QRFeedz\Admin\Traits\HasAddressFields;
@@ -123,7 +123,7 @@ class User extends QRFeedzResource
                 ->canSee(fn ($request) => $request->user()->isSystemAdminLike()),
 
             // Relationship ID: 1
-            HasMany::make('Affiliated Clients', 'affiliatedClients', Client::class)
+            QRHasMany::make('Affiliated Clients', 'affiliatedClients', Client::class)
                    ->canSee(fn () => $this->resource->isAffiliate()),
 
             QRDateTime::make('Created At'),
@@ -134,10 +134,10 @@ class User extends QRFeedzResource
                          ->canSee(fn ($request) => ! $request->findModel()->deleted_at == null),
 
             // Relationship ID: 33
-            HasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
+            QRHasMany::make('Client Authorizations', 'clientAuthorizations', ClientAuthorization::class),
 
             // Relationship ID: 32
-            HasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class),
+            QRHasMany::make('Questionnaire Authorizations', 'questionnaireAuthorizations', QuestionnaireAuthorization::class),
         ];
     }
 }

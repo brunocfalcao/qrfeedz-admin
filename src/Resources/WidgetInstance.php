@@ -5,6 +5,7 @@ namespace QRFeedz\Admin\Resources;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -30,13 +31,13 @@ class WidgetInstance extends QRFeedzResource
             QRBelongsTo::make('Widget', 'widget', Widget::class),
 
             // Relationship ID: 10
-            HasMany::make('Child Widget instances', 'childWidgetInstances', WidgetInstance::class),
+            QRHasMany::make('Child Widget instances', 'childWidgetInstances', WidgetInstance::class),
 
             // Relationship ID: 35
             QRBelongsTo::make('Parent Widget instance', 'parentWidgetInstance', WidgetInstance::class),
 
             // Relationship ID: 28
-            HasMany::make('Responses', 'responses', Response::class),
+            QRHasMany::make('Responses', 'responses', Response::class),
 
             // Relationship ID: 23
             MorphToMany::make('Captions', 'captions', Locale::class),
