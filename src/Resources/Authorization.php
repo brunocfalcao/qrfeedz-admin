@@ -58,6 +58,9 @@ class Authorization extends QRFeedzResource
             Canonical::make(),
 
             Text::make('Description')
+                ->resolveUsing(function ($value) {
+                    return substr($value, 0, 50);
+                })
                 ->nullable(),
 
             new Panel('Last data activity', $this->timestamps($request)),
