@@ -33,8 +33,6 @@ class AdminServiceProvider extends QRFeedzServiceProvider
 {
     public function boot()
     {
-        $this->registerMacros();
-
         Nova::mainMenu(function (Request $request) {
             return [
                 MenuSection::make('Main Menu', [
@@ -153,17 +151,5 @@ class AdminServiceProvider extends QRFeedzServiceProvider
     public function register()
     {
         //
-    }
-
-    protected function registerMacros(): void
-    {
-        // Include all files from the Macros folder.
-        Collection::make(glob(__DIR__.'/Macros/*.php'))
-              ->mapWithKeys(function ($path) {
-                  return [$path => pathinfo($path, PATHINFO_FILENAME)];
-              })
-              ->each(function ($macro, $path) {
-                  require_once $path;
-              });
     }
 }

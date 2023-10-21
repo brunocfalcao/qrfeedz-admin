@@ -58,7 +58,6 @@ class Authorization extends QRFeedzResource
             Canonical::make(),
 
             Text::make('Description')
-                ->charLimit(50)
                 ->nullable(),
 
             new Panel('Last data activity', $this->timestamps($request)),
