@@ -3,7 +3,6 @@
 namespace QRFeedz\Admin;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Menu\MenuGroup;
 use Laravel\Nova\Menu\MenuItem;
