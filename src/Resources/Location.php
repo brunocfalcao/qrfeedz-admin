@@ -24,16 +24,24 @@ class Location extends QRFeedzResource
 
     public static $model = \QRFeedz\Cube\Models\Location::class;
 
-    public static $title = 'name';
+    public function title()
+    {
+        return $this->address;
+    }
+
+    public function subtitle()
+    {
+        return 'from ' . $this->client->name;
+    }
 
     public static $search = [
         'name', 'address', 'postal_code', 'city',
     ];
 
-    public function subtitle()
-    {
-        return $this->client->name;
-    }
+    public static $searchRelations = [
+        'client' => ['name'],
+        'country' => ['name'],
+    ];
 
     public function fields(NovaRequest $request)
     {
