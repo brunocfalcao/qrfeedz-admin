@@ -20,6 +20,10 @@ class OpenAIPrompt extends QRFeedzResource
         'prompt_i_am_paying_attention_to',
     ];
 
+    public static $searchRelations = [
+        'questionnaire' => ['name'],
+    ];
+
     public static function label()
     {
         return 'OpenAI Prompts';
