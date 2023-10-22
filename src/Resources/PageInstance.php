@@ -17,7 +17,10 @@ class PageInstance extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\PageInstance::class;
 
-    public static $search = [];
+    public static $searchRelations = [
+        'questionnaire' => ['name'],
+        'Page' => ['name'],
+    ];
 
     public function title()
     {
@@ -44,8 +47,7 @@ class PageInstance extends QRFeedzResource
                 ->rules('required'),
 
             // Relationship ID: 16
-            QRBelongsTo::make('Page', 'page', Page::class)
-                     ->readonlyIfViaResource('page-instances'),
+            QRBelongsTo::make('Page', 'page', Page::class),
 
             Text::make('View Component')
                 ->readonly(),
@@ -66,8 +68,7 @@ class PageInstance extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 24
-            QRHasMany::make('Question instances', 'questionInstances', QuestionInstance::class)
-                   ->collapsedByDefault(),
+            QRHasMany::make('Question instances', 'questionInstances', QuestionInstance::class),
         ];
     }
 }
