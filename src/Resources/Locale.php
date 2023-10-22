@@ -3,12 +3,12 @@
 namespace QRFeedz\Admin\Resources;
 
 use Brunocfalcao\LaravelNovaHelpers\Fields\Canonical;
-use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
+use QRFeedz\Admin\Fields\QRMorphedByMany;
 use QRFeedz\Admin\Traits\DefaultAscPKSorting;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
@@ -18,11 +18,14 @@ class Locale extends QRFeedzResource
 
     public static $model = \QRFeedz\Cube\Models\Locale::class;
 
-    public static $title = 'name';
-
     public static $search = [
         'name',
     ];
+
+    public function title()
+    {
+        return $this->name.' ('.$this->canonical.')';
+    }
 
     public function fields(NovaRequest $request)
     {
@@ -39,19 +42,19 @@ class Locale extends QRFeedzResource
             new Panel('Timestamps', $this->timestamps($request)),
 
             // Relationship ID: 11
-            QRHasMany::make('Clients', 'clients', Client::class)
+            QRHasMany::make('Default Client locales', 'clients', Client::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 14
-            QRHasMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
+            QRHasMany::make('Default Questionnaire locales', 'questionnaires', Questionnaire::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 27
-            QRHasMany::make('Users', 'users', User::class)
+            QRHasMany::make('Default User locales', 'users', User::class)
                    ->collapsedByDefault(),
 
             // Relationship ID: 15
-            MorphedByMany::make('Related Question instances', 'questionInstances', QuestionInstance::class)
+            QRMorphedByMany::make('Related Question instance locales', 'questionInstances', QuestionInstance::class)
                 ->fields(fn () => [
                     Text::make('Caption', 'caption')
                           ->sortable(),
@@ -59,11 +62,10 @@ class Locale extends QRFeedzResource
                     Text::make('Placeholder', 'placeholder')
                           ->sortable(),
                 ])
-                ->nullable()
-                ->collapsedByDefault(),
+                ->nullable(),
 
             // Relationship ID: 23
-            MorphedByMany::make('Related Widget instances', 'widgetInstances', WidgetInstance::class)
+            QRMorphedByMany::make('Related Widget instance locales', 'widgetInstances', WidgetInstance::class)
                 ->fields(fn () => [
                     Text::make('Caption', 'caption')
                           ->sortable(),
@@ -71,8 +73,7 @@ class Locale extends QRFeedzResource
                     Text::make('Placeholder', 'placeholder')
                           ->sortable(),
                 ])
-                ->nullable()
-                ->collapsedByDefault(),
+                ->nullable(),
         ];
     }
 }

@@ -38,8 +38,7 @@ class PageInstance extends QRFeedzResource
             UUID::make(),
 
             // Relationship ID: 21
-            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
-                     ->readonlyIfViaResource('page-instances'),
+            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 
             Text::make('Name')
                 ->rules('required'),

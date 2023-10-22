@@ -34,16 +34,13 @@ class QuestionnaireAuthorization extends QRFeedzResource
             QRID::make(),
 
             // Relationship ID: 31
-            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
-                     ->readonlyIfViaResource('questionnaires'),
+            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 
             // Relationship ID: 32
-            QRBelongsTo::make('User', 'user', User::class)
-                     ->readonlyIfViaResource('users'),
+            QRBelongsTo::make('User', 'user', User::class),
 
             // Relationship ID: 29
-            QRBelongsTo::make('Authorization', 'authorization', Authorization::class)
-                     ->readonlyIfViaResource('authorizations'),
+            QRBelongsTo::make('Authorization', 'authorization', Authorization::class),
 
             new Panel('Timestamps', $this->timestamps($request)),
         ];

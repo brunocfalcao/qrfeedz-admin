@@ -105,12 +105,10 @@ class User extends QRFeedzResource
                 }),
 
             // Relationship ID: 7
-            QRBelongsTo::make('Client', 'client', Client::class)
-                     ->readonlyIfViaResource('clients'),
+            QRBelongsTo::make('Client', 'client', Client::class),
 
             // Relationship ID: 27
-            QRBelongsTo::make('Locale', 'locale', Locale::class)
-                       ->readonlyIfViaResource('users'),
+            QRBelongsTo::make('Locale', 'locale', Locale::class),
 
             new Panel('Address Information', $this->addressFields()),
 

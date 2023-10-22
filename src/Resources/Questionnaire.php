@@ -87,8 +87,7 @@ class Questionnaire extends QRFeedzResource
                 ->rules('required'),
 
             // Relationship ID: 26
-            QRBelongsTo::make('Location', 'location', Location::class)
-                     ->readonlyIfViaResource('questionnaires'),
+            QRBelongsTo::make('Location', 'location', Location::class),
 
             Textarea::make('Description'),
 

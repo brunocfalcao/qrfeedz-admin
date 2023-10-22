@@ -41,8 +41,7 @@ class Location extends QRFeedzResource
             QRID::make(),
 
             // Relationship ID: 5
-            QRBelongsTo::make('Client', 'client', Client::class)
-                       ->readonlyIfViaResource('locations'),
+            QRBelongsTo::make('Client', 'client', Client::class),
 
             Text::make('Name')
                 ->rules('required', 'max:255'),
@@ -58,7 +57,6 @@ class Location extends QRFeedzResource
 
             // Relationship ID: 25
             QRBelongsTo::make('Country', 'country', CountryResource::class)
-                     ->readonlyIfViaResource('locations')
                      ->exceptOnForms(),
 
             TRCountry::make('Country', 'country_id')

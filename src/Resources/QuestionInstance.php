@@ -35,8 +35,7 @@ class QuestionInstance extends QRFeedzResource
             UUID::make(),
 
             // Relationship ID: 24
-            QRBelongsTo::make('Page instance', 'pageInstance', PageInstance::class)
-                       ->readonlyIfViaResource('question-instances'),
+            QRBelongsTo::make('Page instance', 'pageInstance', PageInstance::class),
 
             Boolean::make('Is analytical?', 'is_analytical')
                    ->helpInfo('If the question instance value will be used for reports.<br/>If it is not then it can be to display a message, or to capture custom information'),

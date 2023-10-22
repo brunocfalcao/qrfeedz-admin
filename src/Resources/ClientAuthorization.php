@@ -34,16 +34,13 @@ class ClientAuthorization extends QRFeedzResource
             QRID::make(),
 
             // Relationship ID: 34
-            QRBelongsTo::make('Client', 'client', Client::class)
-                     ->readonlyIfViaResource('clients'),
+            QRBelongsTo::make('Client', 'client', Client::class),
 
             // Relationship ID: 33
-            QRBelongsTo::make('User', 'user', User::class)
-                     ->readonlyIfViaResource('users'),
+            QRBelongsTo::make('User', 'user', User::class),
 
             // Relationship ID: 4
-            QRBelongsTo::make('Authorization', 'authorization', Authorization::class)
-                     ->readonlyIfViaResource('authorizations'),
+            QRBelongsTo::make('Authorization', 'authorization', Authorization::class),
 
             new Panel('Timestamps', $this->timestamps($request)),
         ];

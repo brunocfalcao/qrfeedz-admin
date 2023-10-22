@@ -5,6 +5,7 @@ namespace QRFeedz\Admin\Resources;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;

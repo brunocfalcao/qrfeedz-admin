@@ -3,11 +3,11 @@
 namespace QRFeedz\Admin\Resources;
 
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\MorphedByMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRID;
+use QRFeedz\Admin\Fields\QRMorphedByMany;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Tag extends QRFeedzResource
@@ -33,7 +33,7 @@ class Tag extends QRFeedzResource
             new Panel('Last data activity', $this->timestamps($request)),
 
             // Relationship ID: 13
-            MorphedByMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
+            QRMorphedByMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
                 ->nullable()
                 ->collapsedByDefault(),
         ];

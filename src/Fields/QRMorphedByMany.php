@@ -2,15 +2,14 @@
 
 namespace QRFeedz\Admin\Fields;
 
-use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\MorphedByMany;
 
-class QRBelongsTo extends BelongsTo
+class QRMorphedByMany extends MorphedByMany
 {
     public function __construct($name, $attribute = null, $resource = null)
     {
         parent::__construct($name, $attribute, $resource);
 
-        $this->readonlyIfViaResource();
-        $this->withoutTrashed();
+        $this->collapsedByDefault();
     }
 }

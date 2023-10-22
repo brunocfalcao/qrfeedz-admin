@@ -59,8 +59,7 @@ class OpenAIPrompt extends QRFeedzResource
                    ->helpInfo('If it is, then a notification is sent to the questionnaire owner if an email is given by a visitor'),
 
             // Relationship ID: 18
-            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class)
-                       ->readonlyIfViaResource('open-a-i-prompts'),
+            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 
             new Panel('Timestamps', $this->timestamps($request)),
         ];
