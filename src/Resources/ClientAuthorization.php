@@ -2,7 +2,7 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use Laravel\Nova\Fields\BelongsTo;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRID;
@@ -12,7 +12,15 @@ class ClientAuthorization extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\ClientAuthorization::class;
 
-    public static $title = 'id';
+    public function title()
+    {
+        return $this->authorization->name.
+               ' for '.
+               $this->user->name.
+               ' ('.
+               $this->client->name.
+               ')';
+    }
 
     public static $searchRelations = [
         'client' => ['name'],
@@ -26,15 +34,15 @@ class ClientAuthorization extends QRFeedzResource
             QRID::make(),
 
             // Relationship ID: 34
-            BelongsTo::make('Client', 'client', Client::class)
+            QRBelongsTo::make('Client', 'client', Client::class)
                      ->readonlyIfViaResource('clients'),
 
             // Relationship ID: 33
-            BelongsTo::make('User', 'user', User::class)
+            QRBelongsTo::make('User', 'user', User::class)
                      ->readonlyIfViaResource('users'),
 
             // Relationship ID: 4
-            BelongsTo::make('Authorization', 'authorization', Authorization::class)
+            QRBelongsTo::make('Authorization', 'authorization', Authorization::class)
                      ->readonlyIfViaResource('authorizations'),
 
             new Panel('Timestamps', $this->timestamps($request)),
