@@ -2,15 +2,21 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use QRFeedz\Admin\Fields\QRBelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class ClientAuthorization extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\ClientAuthorization::class;
+
+    public static $searchRelations = [
+        'client' => ['name'],
+        'user' => ['name'],
+        'authorization' => ['name'],
+    ];
 
     public function title()
     {
@@ -21,12 +27,6 @@ class ClientAuthorization extends QRFeedzResource
                $this->client->name.
                ')';
     }
-
-    public static $searchRelations = [
-        'client' => ['name'],
-        'user' => ['name'],
-        'authorization' => ['name'],
-    ];
 
     public function fields(NovaRequest $request)
     {
