@@ -2,6 +2,8 @@
 
 namespace QRFeedz\Admin\Fields;
 
+use Laravel\Nova\Fields\MorphToMany;
+
 class QRMorphToMany extends MorphToMany
 {
     public function __construct($name, $attribute = null, $resource = null)
