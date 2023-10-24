@@ -12,6 +12,8 @@ class QuestionnaireAuthorization extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\QuestionnaireAuthorization::class;
 
+    public static $globallySearchable = false;
+
     public static $searchRelations = [
         'questionnaire' => ['name'],
         'user' => ['name'],

@@ -18,9 +18,7 @@ class Category extends QRFeedzResource
 
     public static $model = \QRFeedz\Cube\Models\Category::class;
 
-    public static $search = [
-        'name',
-    ];
+    public static $globallySearchable = false;
 
     public function title()
     {

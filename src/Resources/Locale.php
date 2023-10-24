@@ -18,9 +18,7 @@ class Locale extends QRFeedzResource
 
     public static $model = \QRFeedz\Cube\Models\Locale::class;
 
-    public static $search = [
-        'name',
-    ];
+    public static $globallySearchable = false;
 
     public function title()
     {

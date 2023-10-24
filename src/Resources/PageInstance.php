@@ -17,6 +17,8 @@ class PageInstance extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\PageInstance::class;
 
+    public static $globallySearchable = false;
+
     public static $searchRelations = [
         'questionnaire' => ['name'],
         'Page' => ['name'],

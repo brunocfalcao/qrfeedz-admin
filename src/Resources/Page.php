@@ -19,9 +19,7 @@ class Page extends QRFeedzResource
 
     public static $title = 'name';
 
-    public static $search = [
-        'name', 'description',
-    ];
+    public static $globallySearchable = false;
 
     public function fields(NovaRequest $request)
     {

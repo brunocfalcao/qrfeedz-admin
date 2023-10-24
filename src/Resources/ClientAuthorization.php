@@ -12,6 +12,8 @@ class ClientAuthorization extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\ClientAuthorization::class;
 
+    public static $globallySearchable = false;
+
     public static $searchRelations = [
         'client' => ['name'],
         'user' => ['name'],

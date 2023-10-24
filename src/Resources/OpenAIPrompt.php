@@ -15,10 +15,7 @@ class OpenAIPrompt extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\OpenAIPrompt::class;
 
-    public static $search = [
-        'prompt_i_am_a_business_of',
-        'prompt_i_am_paying_attention_to',
-    ];
+    public static $globallySearchable = false;
 
     public static $searchRelations = [
         'questionnaire' => ['name'],

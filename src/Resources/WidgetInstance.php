@@ -16,9 +16,7 @@ class WidgetInstance extends QRFeedzResource
 
     public static $title = 'uuid';
 
-    public static $search = [
-        'id',
-    ];
+    public static $globallySearchable = false;
 
     public function fields(NovaRequest $request)
     {

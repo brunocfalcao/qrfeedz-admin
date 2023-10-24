@@ -20,6 +20,12 @@ class Response extends QRFeedzResource
 
     public static $globallySearchable = false;
 
+    public static $searchRelations = [
+        'locale' => ['name'],
+        'country' => ['name'],
+        'affiliate' => ['name'],
+    ];
+
     public function title()
     {
         /**

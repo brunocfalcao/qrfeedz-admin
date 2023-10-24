@@ -18,9 +18,7 @@ class Authorization extends QRFeedzResource
 
     public static $model = \QRFeedz\Cube\Models\Authorization::class;
 
-    public static $search = [
-        'name',
-    ];
+    public static $globallySearchable = false;
 
     public function title()
     {

@@ -14,9 +14,7 @@ class Widget extends Resource
 
     public static $title = 'name';
 
-    public static $search = [
-        'name', 'description',
-    ];
+    public static $globallySearchable = false;
 
     public function fields(NovaRequest $request)
     {
