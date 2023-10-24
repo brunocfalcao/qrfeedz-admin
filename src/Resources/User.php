@@ -26,6 +26,12 @@ class User extends QRFeedzResource
         'name', 'email',
     ];
 
+    public static $searchRelations = [
+        'country' => ['name'],
+        'client'  => ['name'],
+        'locale'  => ['name'],
+    ];
+
     public function title()
     {
         return $this->name;
@@ -38,32 +44,6 @@ class User extends QRFeedzResource
         }
     }
 
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        /**
-         * The logged user can list users that:
-         * View all users in case the user is super admin (OR)
-         * View all users from the client that it belongs to if the logged user
-         * has "admin" permission on the respective client (OR)
-         * Its the user itself (so the user can change its own data)
-         */
-        $user = $request->user();
-
-        // Super admin? Done.
-        if ($user->isSuperAdmin()) {
-            return $query;
-        }
-
-        return $query->where(function ($query) use ($user) {
-            if ($user->isAuthorizedAs($user->client, 'client-admin')) {
-                // Adds all the users part of his client.
-                $query->where('client_id', $user->client_id);
-            }
-            // Adds himself to the indexQuery.
-            $query->orWhere('id', $user->id);
-        });
-    }
-
     public function fields(NovaRequest $request)
     {
         return [
@@ -72,6 +52,8 @@ class User extends QRFeedzResource
             Text::make('Name')
                 ->sortable()
                 ->rules('required', 'max:255'),
+
+            new Panel('Address Information', $this->addressFields()),
 
             Text::make('Email')
                 ->sortable()
