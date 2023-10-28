@@ -28,8 +28,8 @@ class User extends QRFeedzResource
 
     public static $searchRelations = [
         'country' => ['name'],
-        'client'  => ['name'],
-        'locale'  => ['name'],
+        'client' => ['name'],
+        'locale' => ['name'],
     ];
 
     public function title()
