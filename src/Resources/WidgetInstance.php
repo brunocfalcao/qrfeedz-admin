@@ -5,6 +5,7 @@ namespace QRFeedz\Admin\Resources;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
@@ -14,9 +15,16 @@ class WidgetInstance extends QRFeedzResource
 {
     public static $model = \QRFeedz\Cube\Models\WidgetInstance::class;
 
-    public static $title = 'uuid';
-
     public static $globallySearchable = false;
+
+    public static $searchRelations = [
+        'widget' => ['name'],
+    ];
+
+    public function title()
+    {
+        return 'Widget Instance from widget '.$this->widget->name;
+    }
 
     public function fields(NovaRequest $request)
     {
@@ -40,6 +48,8 @@ class WidgetInstance extends QRFeedzResource
 
             // Relationship ID: 23
             MorphToMany::make('Captions', 'captions', Locale::class),
+
+            new Panel('Last data activity', $this->timestamps($request)),
         ];
     }
 }
