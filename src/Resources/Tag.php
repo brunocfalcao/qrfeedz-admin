@@ -6,8 +6,8 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRID;
-use QRFeedz\Admin\Fields\QRMorphedByMany;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class Tag extends QRFeedzResource
@@ -16,12 +16,26 @@ class Tag extends QRFeedzResource
 
     public static $title = 'name';
 
-    public static $globallySearchable = false;
+    public static $search = [
+        'name',
+    ];
+
+    public static $searchRelations = [
+        'questionnaire' => ['name'],
+    ];
+
+    public static function defaultOrderings($query)
+    {
+        return $query->orderBy('name', 'asc');
+    }
 
     public function fields(NovaRequest $request)
     {
         return [
             QRID::make(),
+
+            // Relationship ID: 13
+            QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 
             Text::make('Name')
                 ->rules('required'),
@@ -29,11 +43,6 @@ class Tag extends QRFeedzResource
             Text::make('Description'),
 
             new Panel('Last data activity', $this->timestamps($request)),
-
-            // Relationship ID: 13
-            QRMorphedByMany::make('Questionnaires', 'questionnaires', Questionnaire::class)
-                ->nullable()
-                ->collapsedByDefault(),
         ];
     }
 }

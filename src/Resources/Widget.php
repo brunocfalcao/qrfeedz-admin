@@ -2,14 +2,18 @@
 
 namespace QRFeedz\Admin\Resources;
 
-use App\Nova\Resource;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Panel;
 use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
+use QRFeedz\Admin\Traits\DefaultAscPKSorting;
+use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
-class Widget extends Resource
+class Widget extends QRFeedzResource
 {
+    use DefaultAscPKSorting;
+
     public static $model = \QRFeedz\Cube\Models\Widget::class;
 
     public static $title = 'name';
@@ -23,6 +27,8 @@ class Widget extends Resource
 
             // Relationship ID: 22
             QRHasMany::make('Widget instances', 'widgetInstances', WidgetInstance::class),
+
+            new Panel('Last data activity', $this->timestamps($request)),
         ];
     }
 }
