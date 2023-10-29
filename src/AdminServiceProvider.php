@@ -16,8 +16,6 @@ use QRFeedz\Admin\Resources\Country;
 use QRFeedz\Admin\Resources\Locale;
 use QRFeedz\Admin\Resources\Location;
 use QRFeedz\Admin\Resources\OpenAIPrompt;
-use QRFeedz\Admin\Resources\Page;
-use QRFeedz\Admin\Resources\PageInstance;
 use QRFeedz\Admin\Resources\QuestionInstance;
 use QRFeedz\Admin\Resources\Questionnaire;
 use QRFeedz\Admin\Resources\QuestionnaireAuthorization;
@@ -72,7 +70,6 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                 MenuSection::make('Main Menu', [
                     MenuItem::resource(ClientAuthorization::class),
                     MenuItem::resource(QuestionnaireAuthorization::class),
-                    MenuItem::resource(PageInstance::class),
                     MenuItem::resource(QuestionInstance::class),
                     MenuItem::resource(OpenAIPrompt::class),
                     MenuItem::resource(Tag::class),
@@ -103,7 +100,6 @@ class AdminServiceProvider extends QRFeedzServiceProvider
 
                     MenuGroup::make('Admin', [
                         MenuItem::resource(OpenAIPrompt::class),
-                        MenuItem::resource(PageInstance::class),
                         MenuItem::resource(QuestionInstance::class),
                         MenuItem::resource(WidgetInstance::class),
                     ])->collapsable()
@@ -113,7 +109,6 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                         MenuItem::resource(Category::class),
                         MenuItem::resource(Country::class),
                         MenuItem::resource(Locale::class),
-                        MenuItem::resource(Page::class),
                         MenuItem::resource(Widget::class),
                     ])->collapsable()
                       ->collapsedByDefault(),
@@ -134,8 +129,6 @@ class AdminServiceProvider extends QRFeedzServiceProvider
             Locale::class, // Added.
             Questionnaire::class, // Added.
             OpenAIPrompt::class, // Added.
-            Page::class, // Added.
-            PageInstance::class, // Added.
             QuestionInstance::class, // Added.
             WidgetInstance::class,
             Response::class, // Added.

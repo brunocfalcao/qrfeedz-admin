@@ -119,9 +119,6 @@ class Questionnaire extends QRFeedzResource
             QRBelongsTo::make('Category', 'category', Category::class)
                      ->withoutTrashed(),
 
-            // Relationship ID: 21
-            QRHasMany::make('Page instances', 'pageInstances', PageInstance::class),
-
             // Relationship ID: 18
             HasOne::make('OpenAI Prompt', 'OpenAIPrompt', OpenAIPrompt::class),
 
