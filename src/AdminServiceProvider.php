@@ -3,6 +3,7 @@
 namespace QRFeedz\Admin;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Menu\MenuGroup;
 use Laravel\Nova\Menu\MenuItem;
@@ -40,8 +41,8 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                 ])->icon('chart-bar')
                   ->canSee(function (NovaRequest $request) {
                       return
-                       // User is affiliate
-                       $request->user()->isAffiliate();
+                       // User is affiliate.
+                       Auth::user()->isAffiliate();
                   }),
 
                 MenuSection::make('Main Menu', [
@@ -53,8 +54,8 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                 ])->icon('chart-bar')
                   ->canSee(function (NovaRequest $request) {
                       return
-                             // User is client-admin.
-                             $request->user()->isAtLeastAuthorizedAs('client-admin');
+                        // User is client-admin.
+                        Auth::user()->isAtLeastAuthorizedAs('client-admin');
                   }),
 
                 MenuSection::make('Main Menu', [
@@ -63,8 +64,8 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                 ])->icon('chart-bar')
                   ->canSee(function (NovaRequest $request) {
                       return
-                             // User is client-admin.
-                             $request->user()->isAtLeastAuthorizedAs('questionnaire-admin');
+                        // User is client-admin.
+                        Auth::user()->isAtLeastAuthorizedAs('questionnaire-admin');
                   }),
 
                 MenuSection::make('Main Menu', [
@@ -76,7 +77,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                     MenuItem::resource(WidgetInstance::class),
                 ])->icon('server')
                   ->canSee(function (NovaRequest $request) {
-                      return $request->user()->isAdmin();
+                      return Auth::user()->isAdmin();
                   }),
 
                 MenuSection::make('Main Menu', [
@@ -114,7 +115,7 @@ class AdminServiceProvider extends QRFeedzServiceProvider
                       ->collapsedByDefault(),
                 ])->icon('server')
                   ->canSee(function (NovaRequest $request) {
-                      return $request->user()->isSuperAdmin();
+                      return Auth::user()->isSuperAdmin();
                   }),
             ];
         });

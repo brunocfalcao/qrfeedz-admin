@@ -112,15 +112,18 @@ class Questionnaire extends QRFeedzResource
                      ->hideFromIndex(),
 
             // Relationship ID: 14
-            QRBelongsTo::make('Default locale', 'locale', Locale::class)
-                     ->withoutTrashed(),
+            QRBelongsTo::make('Default locale', 'locale', Locale::class),
 
             // Relationship ID: 6
-            QRBelongsTo::make('Category', 'category', Category::class)
-                     ->withoutTrashed(),
+            QRBelongsTo::make('Category', 'category', Category::class),
+
+            // Relationship ID: 24
+            QRHasMany::make('Question instances', 'questionInstances', QuestionInstance::class)
+                   ->nullable(),
 
             // Relationship ID: 18
-            HasOne::make('OpenAI Prompt', 'OpenAIPrompt', OpenAIPrompt::class),
+            HasOne::make('OpenAI Prompt', 'openAIPrompt', OpenAIPrompt::class)
+                  ->exceptOnForms(),
 
             // Relationship ID: 13
             QRHasMany::make('Tags', 'tags', Tag::class)
