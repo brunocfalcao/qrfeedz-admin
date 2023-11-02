@@ -28,6 +28,9 @@ class Widget extends QRFeedzResource
             // Relationship ID: 22
             QRHasMany::make('Widget instances', 'widgetInstances', WidgetInstance::class),
 
+            // Relationship ID: 23
+            MorphToMany::make('Captions', 'captions', Locale::class),
+
             new Panel('Last data activity', $this->timestamps($request)),
         ];
     }

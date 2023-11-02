@@ -95,6 +95,8 @@ class Questionnaire extends QRFeedzResource
 
             Textarea::make('Description'),
 
+            Boolean::make('Has Splash Screen?', 'has_splash_screen'),
+
             Boolean::make('Active?', 'is_active'),
 
             Color::make('Primary color', 'color_primary'),

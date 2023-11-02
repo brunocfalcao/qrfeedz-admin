@@ -63,7 +63,7 @@ class Locale extends QRFeedzResource
                 ->nullable(),
 
             // Relationship ID: 23
-            QRMorphedByMany::make('Related Widget instance locales', 'widgetInstances', WidgetInstance::class)
+            QRMorphedByMany::make('Related Widget locales', 'widgets', WidgetInstance::class)
                 ->fields(fn () => [
                     Text::make('Caption', 'caption')
                           ->sortable(),
