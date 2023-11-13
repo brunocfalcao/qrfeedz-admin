@@ -22,6 +22,11 @@ class QRDateTime extends Text
              ->hideWhenCreating()
              ->resolveUsing(function ($value) {
                  return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
+             })
+             ->canSee(function ($request) {
+                if (!via_resource()) {
+                    return true;
+                };
              });
     }
 }

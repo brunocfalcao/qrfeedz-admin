@@ -36,6 +36,10 @@ class QuestionInstance extends QRFeedzResource
 
             UUID::make(),
 
+            Text::make('Question', function () {
+                return $this->computedQuestion;
+            }),
+
             QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),
 
             Boolean::make('Is analytical?', 'is_analytical')

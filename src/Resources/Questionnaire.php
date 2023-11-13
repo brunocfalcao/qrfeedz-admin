@@ -95,13 +95,16 @@ class Questionnaire extends QRFeedzResource
 
             Textarea::make('Description'),
 
-            Boolean::make('Has Splash Screen?', 'has_splash_screen'),
+            Boolean::make('Has Splash Screen?', 'has_splash_screen')
+                   ->hideFromIndex(),
 
             Boolean::make('Active?', 'is_active'),
 
-            Color::make('Primary color', 'color_primary'),
+            Color::make('Primary color', 'color_primary')
+                 ->hideFromIndex(),
 
-            Color::make('Secondary color', 'color_secondary'),
+            Color::make('Secondary color', 'color_secondary')
+                 ->hideFromIndex(),
 
             new Panel('Timestamps', $this->timestamps($request)),
 
