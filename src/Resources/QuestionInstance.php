@@ -11,12 +11,13 @@ use QRFeedz\Admin\Fields\QRBelongsTo;
 use QRFeedz\Admin\Fields\QRHasMany;
 use QRFeedz\Admin\Fields\QRID;
 use QRFeedz\Admin\Fields\QRMorphToMany;
-use QRFeedz\Admin\Traits\DefaultDescPKSorting;
+use QRFeedz\Admin\Traits\DefaultAscPKSorting;
+use QRFeedz\Cube\Models\Locale as LocalModel;
 use QRFeedz\Foundation\Abstracts\QRFeedzResource;
 
 class QuestionInstance extends QRFeedzResource
 {
-    use DefaultDescPKSorting;
+    use DefaultAscPKSorting;
 
     public static $model = \QRFeedz\Cube\Models\QuestionInstance::class;
 
@@ -37,7 +38,23 @@ class QuestionInstance extends QRFeedzResource
             UUID::make(),
 
             Text::make('Question', function () {
-                return $this->computedQuestion;
+
+                /**
+                 * Retrieve the label of the questionnaire default locale.
+                 * If the label still doesn't exist, return whatever
+                 * question instance locale that is made.
+                 * If no locale was found, just render <no locale found>.
+                 */
+                $defaultLocale = LocalModel::firstWhere('id', $this->questionnaire->locale_id);
+
+                return
+                    /**
+                     * Return the questionnaire default locale captions, or, if
+                     * not present, the first locale caption that is found.
+                     */
+                    $this->captions()->where('locale_id', $defaultLocale->id)->exists() ?
+                        $this->captions()->firstWhere('locale_id', $defaultLocale->id)->pivot->caption :
+                        $this->captions()->first()->pivot->caption;
             }),
 
             QRBelongsTo::make('Questionnaire', 'questionnaire', Questionnaire::class),

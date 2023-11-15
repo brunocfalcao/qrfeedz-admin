@@ -24,9 +24,9 @@ class QRDateTime extends Text
                  return $value ? \Carbon\Carbon::parse($value)->diffForHumans() : null;
              })
              ->canSee(function ($request) {
-                if (!via_resource()) {
-                    return true;
-                };
+                 if (! via_resource()) {
+                     return true;
+                 }
              });
     }
 }

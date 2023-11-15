@@ -37,9 +37,9 @@ trait HasAddressFields
                          return Country::firstWhere('id', $value)?->name;
                      })
                      ->fillUsing(function ($request, $model, $attribute, $requestAttribute) {
-                        if ($request->input($attribute) != null) {
-                            $model->{$attribute} = Country::firstWhere('name', $request->input($attribute))->id;
-                        }
+                         if ($request->input($attribute) != null) {
+                             $model->{$attribute} = Country::firstWhere('name', $request->input($attribute))->id;
+                         }
                      })
                      ->onlyOnForms()
                      ->rules($rule),
